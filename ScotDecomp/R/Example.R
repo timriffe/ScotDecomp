@@ -22,11 +22,15 @@ getUk <- function(qx){
 	U
 }
 
-# get N from qx
+# get N from qx (conditional lx)
 getNk <- function(qx){
 	Uk <- getUk(qx)
 	Nk <- solve(diag(length(qx))-Uk)
 	Nk
+}
+# just to get lx starting from 0
+getNk1 <- function(qx){
+	getNk(qx)[,1]
 }
 
 # get eta 1 from qx
@@ -57,44 +61,67 @@ getVk  <- function(qx){
 
 # calculate within-variance (QXk is age in rows and pops in columns)
 # length(pik) must equal ncol(QXk)
-Vwithin <- function(QXk, pik){
+Vwithin <- function(QXk, pik = rep(1/ncol(QXk),ncol(QXk))){
 	# if pi not given, let's assume it's
 	# uniform
 	if (missing(pik)){
 		pik <- rep(1 / ncol(QXk), ncol(QXk))
 	}
-	stopifnot(length(pik) == ncol (QXk))
-	
-	VX <- apply(QXk, 2, getVk)
-	
-	Vw <- VX %*% pik
-	Vw
-}
-
-# calculate between-variance(QXk is age in rows and pops in columns)
-# length(pik) must equal ncol(QXk)
-Vbetween <- function(QXk, pik){
-	# if pi not given, let's assume it's
-	# uniform
-	if (missing(pik)){
-		pik <- rep(1 / ncol(QXk), ncol(QXk))
-	}
-	stopifnot(length(pik) == ncol (QXk))
+	stopifnot(length(pik) == ncol(QXk))
 	# make sure sums to 1
 	pik <- pik / sum(pik)
 	
-	Eta1s <- apply(QXk, 2, getEta1k)
-	((Eta1s ^ 2) %*% pik) - ((Eta1s %*% pik) ^ 2)
+	pik <- as.matrix(pik)
+	# if it's only ncol values, then we assume stationary decrement
+	if (!all(dim(pik) == dim(QXk))){
+		LXk   <- apply(QXk, 2, getNk1)
+		LXpik <- t(LXk) * c(pik)
+		pik   <- t(LXpik %*% diag(1/colSums(LXpik)))
+	}
+	
+	VX <- apply(QXk, 2, getVk)
+	
+	Vw <- VX * pik
+	Vw %*% c(rep(1,ncol(Vw)))
+
 }
 
+# calculate between-variance(QXk is age in rows and pops in columns)
+# pi can be a vector of length ncol(QXk)
+# or a matrix of dimension dim(QXk).
+# if a vector, we assume a stationary decrement to weights
+# to produce an age pattern to weights
+Vbetween <- function(QXk, pik = rep(1/ncol(QXk),ncol(QXk))){
+	# if pi not given, let's assume it's
+	# uniform
+	if (missing(pik)){
+		pik <- rep(1 / ncol(QXk), ncol(QXk))
+	}
+	stopifnot(length(pik) == ncol (QXk))
+	
+	# make sure sums to 1
+	pik <- pik / sum(pik)
+	
+	pik <- as.matrix(pik)
+	# if it's only ncol values, then we assume stationary decrement
+	if (!all(dim(pik) == dim(QXk))){
+		LXk   <- apply(QXk, 2, getNk1)
+		LXpik <- t(LXk) * c(pik)
+		pik   <- t(LXpik %*% diag(1/colSums(LXpik)))
+	}
+	
+	Eta1s <- apply(QXk, 2, getEta1k)
+	
+	Left  <- rowSums((Eta1s ^ 2) * pik)
+	Right <- rowSums(Eta1s * pik) ^ 2
+	#((Eta1s ^ 2) %*% pik) - ((Eta1s %*% pik) ^ 2)
+	Left - Right
+}
+
+test.this <- FALSE
+if (test.this){
 # tests: what do within and between variance sum to? total?
 QXk <- cbind(qx, LT$qx[LT$Year == 2000])
-
-Vwithin(QXk) +
-Vbetween(QXk)
-Vbetween(QXk) + Vwithin(QXk)
-
-
 
 library(DistributionTTD)
 qx2dx <- function(qx){
@@ -104,40 +131,12 @@ qx2dx <- function(qx){
 	dx[N] <- lx[N]
 	dx[1:N]
 }
-dx <- qx2dx(qx)
-# holy shit they're identical
-cbind(getVk(qx),
-momentN(dx, n=2))
 
-# so hwo to combine pops:
+# so how to combine pops:
 dx1   <- qx2dx(QXk[,1])
 dx2   <- qx2dx(QXk[,2])
 dxtot <- dx1 + dx2
-dxtot <- dxtot/sum(dxtot)
-
-plot(dx1,col = "red",type='l')
-lines(dx2,col = "blue")
-lines(dxtot,col="purple")
-
-
-v1   <- getVk(dx2qx(dx1))
-v2   <- getVk(dx2qx(dx2))
-vtot <- getVk(dx2qx(dxtot))
-
-plot(vtot,col="purple",type='l')
-lines(v1,col = "red")
-lines(v2,col = "blue")
-lines(Vbetween(QXk) + Vwithin(QXk))
-v1_2   <- momentN(dx1,2)
-v2_2   <- momentN(dx2,2)
-vtot_2 <- momentN(dxtot,2)
-plot(vtot_2,col="purple",type='l')
-lines(v1_2,col = "red")
-lines(v2_2,col = "blue")
-
-
-plot(momentN(dxtot, n=2))
-lines(Vbetween(QXk) + Vwithin(QXk))
+dxtot <- dxtot / sum(dxtot)
 
 # dx2qx:
 dx2qx<- function(dx){
@@ -146,9 +145,9 @@ dx2qx<- function(dx){
 }
 
 plot(Vbetween(QXk) + Vwithin(QXk))
-
 # 3 identical quantities:
 lines(getVk(dx2qx(dxtot)))
 lines(momentN(dxtot, n=2),lty=2,col="red",lwd=2)
-lx1 <- qx2lx(QXk[,1])/1e5;lx1 <- qx2lx(QXk[,2])/1e5
+lx1 <- qx2lx(QXk[,1],radix=1);lx1 <- qx2lx(QXk[,2],radix=1)
 lines(getVk((lx1 * QXk[,1] + lx2 * QXk[,2])/(lx1+lx2)),col = "blue",lty=3)
+}
