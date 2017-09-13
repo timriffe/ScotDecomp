@@ -6,7 +6,6 @@
 library(HMDHFDplus)
 LT <- readHMDweb("SWE","mltper_1x1",us,pw)
 
-head(LT)
 
 qx <- LT$qx[1:111]
 
@@ -31,6 +30,10 @@ getNk <- function(qx){
 }
 
 # get eta 1 from qx
+# eta 1 is close to ex.
+# the difference between eta 1 and lifetable ex is that eta1
+# assumes survival until the end of the age interval, so it's
+# a bit higher.
 getEta1k <- function(qx){
 	N    <- length(qx)
 	Nk   <- getNk(qx)
@@ -77,31 +80,75 @@ Vbetween <- function(QXk, pik){
 		pik <- rep(1 / ncol(QXk), ncol(QXk))
 	}
 	stopifnot(length(pik) == ncol (QXk))
+	# make sure sums to 1
+	pik <- pik / sum(pik)
 	
 	Eta1s <- apply(QXk, 2, getEta1k)
-	(Eta1s ^ 2) %*% pik - (Eta1s %*% pik) ^ 2
+	((Eta1s ^ 2) %*% pik) - ((Eta1s %*% pik) ^ 2)
 }
 
-getVk(qx)
-plot(sqrt(getVk(qx)))
-
+# tests: what do within and between variance sum to? total?
 QXk <- cbind(qx, LT$qx[LT$Year == 2000])
 
 Vwithin(QXk) +
 Vbetween(QXk)
-
-# how to average qx's together: use lx as weights.
-lx1 <- getNk(QXk[,1])[, 1]
-lx2 <- getNk(QXk[,2])[, 1]
+Vbetween(QXk) + Vwithin(QXk)
 
 
 
-cbind(Vwithin(QXk) - Vbetween(QXk),
-getVk((lx1 * QXk[,1] + lx2 * QXk[,2] ) / (lx1 + lx2)),
-getVk(rowMeans(QXk)))
+library(DistributionTTD)
+qx2dx <- function(qx){
+	N <- length(qx)
+	lx <- cumprod(c(1,1-qx))
+	dx <- -diff(c(lx,0))
+	dx[N] <- lx[N]
+	dx[1:N]
+}
+dx <- qx2dx(qx)
+# holy shit they're identical
+cbind(getVk(qx),
+momentN(dx, n=2))
 
-plot(Vwithin(QXk) + Vbetween(QXk))
-lines(getVk(rowMeans(QXk)))
-lines(getVk((lx1 * QXk[,1] + lx2 * QXk[,2] ) / (lx1 + lx2)))
-lines(Vwithin(QXk))
-lines(Vbetween(QXk))
+# so hwo to combine pops:
+dx1   <- qx2dx(QXk[,1])
+dx2   <- qx2dx(QXk[,2])
+dxtot <- dx1 + dx2
+dxtot <- dxtot/sum(dxtot)
+
+plot(dx1,col = "red",type='l')
+lines(dx2,col = "blue")
+lines(dxtot,col="purple")
+
+
+v1   <- getVk(dx2qx(dx1))
+v2   <- getVk(dx2qx(dx2))
+vtot <- getVk(dx2qx(dxtot))
+
+plot(vtot,col="purple",type='l')
+lines(v1,col = "red")
+lines(v2,col = "blue")
+lines(Vbetween(QXk) + Vwithin(QXk))
+v1_2   <- momentN(dx1,2)
+v2_2   <- momentN(dx2,2)
+vtot_2 <- momentN(dxtot,2)
+plot(vtot_2,col="purple",type='l')
+lines(v1_2,col = "red")
+lines(v2_2,col = "blue")
+
+
+plot(momentN(dxtot, n=2))
+lines(Vbetween(QXk) + Vwithin(QXk))
+
+# dx2qx:
+dx2qx<- function(dx){
+	lx <- rev(cumsum(rev(dx)))
+	dx / lx
+}
+
+plot(Vbetween(QXk) + Vwithin(QXk))
+
+# 3 identical quantities:
+lines(getVk(dx2qx(dxtot)))
+lines(momentN(dxtot, n=2),lty=2,col="red",lwd=2)
+lx1 <- qx2lx(QXk[,1])/1e5;lx1 <- qx2lx(QXk[,2])/1e5
+lines(getVk((lx1 * QXk[,1] + lx2 * QXk[,2])/(lx1+lx2)),col = "blue",lty=3)

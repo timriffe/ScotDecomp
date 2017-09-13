@@ -71,8 +71,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
 
-\title{Symmetry in the forward and backward tenure of transient states in
-multistate stationary populations}
+\title{A decomposition of longevity inquality by deprivation quantiles}
 %\author{author(s) redacted}
 \author[1]{Rosie Seaman\thanks{seaman@demogr.mpg.de}}
 \author[2]{Hal Caswell}
@@ -84,10 +83,41 @@ multistate stationary populations}
 \maketitle
 
 \begin{abstract}
-Within-variance is way bigger than between variance.
+Within-variance is way bigger than between variance we suppose. Let's see. And
+also see how it changes.
 \end{abstract}
 
+\section{Hal's notes}
 
-
-
+Suppose we have 1000+ lifetables at four time points for subareas of Scotland
+that can be assigned to deprivation quantiles. The index $k$ refers to
+subpopulations. Given $p_x = 1- q_x$ for a subpopualtion, calculate:
+\begin{equation}
+\mathbf{U}_k = 
+\begin{bmatrix}
+    0     & \hdots  & \hdots &  \hdots  & 0 \\
+    p_{1} &   &    &    &  \vdots \\
+    0 & \ddots &   &   & \vdots \\
+    \vdots & & \ddots & & 0\\
+   0 &  \hdots & 0 & p_{\omega-1}  & p_{\omega}
+\end{bmatrix}
+\end{equation}
+Then calculate the conditional remaining survivorship as
+\begin{equation}
+\mathbf{N}_k = (\mathbf{I} - \mathbf{U}_k )^{-1} \quad .
+\end{equation}
+$\mathbf{N}_k$ ends up being 0s in the upper triangle, and conditional remaining
+survivorship in columns descending from the subdiagonal. The first moment is the
+same as remaining life expectancy, and can be calculated as:
+\begin{equation}
+\eta^{(k)}_1 = (1^T \mathbf{N}_k)^T
+\end{equation}
+The second moment is defined as:
+\begin{equation}
+\eta^{(k)}_2 = \left[ 1^T \mathbf{N}_k (2\mathbf{N}_k - \mathbf{I})\right]^T
+\end{equation}
+These can be used together to calculate the variance of remaining lifespan:
+\begin{equation}
+V(\eta^{(k)}) = \eta^{(k)}_2 blA BLA
+\end{equation}
 \end{document}
