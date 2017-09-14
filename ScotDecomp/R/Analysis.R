@@ -1,9 +1,8 @@
 # Author: tim
 ###############################################################################
 
-
 SCO <- read.csv("/home/tim/git/ScotDecomp/ScotDecomp/Data/lifetables_quintiles_scotland.csv")
-source("/home/tim/git/ScotDecomp/ScotDecomp/R/Example.R")
+source("/home/tim/git/ScotDecomp/ScotDecomp/R/Functions.R")
 
 library(reshape2)
 QX1981m <- acast(SCO[SCO$year == 1981 & SCO$sex == 1 & SCO$quintile_2 != 999, ], age ~quintile_2, value.var = "qx")
@@ -70,11 +69,13 @@ matplot(a, mp, type = 'l', col = gray(c(.6,.4,.2,0)),lwd = c(2,1.5,1.2,1),
 		main = "Variance due to between-group differences, Males")
 text(20,mp[21, ], c(1981,1991,2001,2011),pos=3,cex=.8)
 
+abline(v=35
 matplot(a, fp, type = 'l', col = gray(c(.6,.4,.2,0)),lwd = c(2,1.5,1.2,1),
 		lty=1,
 		ylab = "proportion",xlab = "age", ylim=c(0,.04),
 		main = "Variance due to between-group differences, Females")
 text(40,fp[41, ], c(1981,1991,2001,2011),pos=c(3,3,3,1),cex=.8)
+abline(v=35)
 dev.off()
 
 # total variance:
@@ -219,4 +220,18 @@ matplot(a, sqrt(ftn), type = 'l', col = gray(c(.6,.4,.2,0)),lwd = c(2,1.5,1.2,1)
 		ylab = "proportion",xlab = "age",ylim=c(0,16),
 		main = "Total sd, Males")
 
+
+#B2001me <- Vbetween(QX2001m[,c(1,5)])
+#W2001me <- Vwithin(QX2001m[,c(1,5)])
+
+matplot(0:85,QX2011m,type='l',log='y')
+
+logit <- function(x){
+(log(x/(1-x)))
+}
+matplot(0:85,QX2011m,type='l',log='y')
+matplot(0:85,logit(QX2011m),type='l')
+
+matplot(0:85,QX1981m,type='l',log='y')
+matplot(0:85,logit(QX1981m),type='l')
 

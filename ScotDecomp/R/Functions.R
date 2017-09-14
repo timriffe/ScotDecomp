@@ -1,16 +1,8 @@
 
-
-# ok, decompose within vs between variance for 2 and N populations.
-
-# 1) get some example data:
-#library(HMDHFDplus)
-#LT <- readHMDweb("SWE","mltper_1x1",us,pw)
+# Author: tim
+###############################################################################
 
 
-#qx <- LT$qx[1:111]
-
-# first eq in Hal's notes,
-# we want px aka (1-qx) in subdaig
 getUk <- function(qx){
 	N <- length(qx)
 	# diag
@@ -85,7 +77,7 @@ Vwithin <- function(QXk, pik = rep(1/ncol(QXk),ncol(QXk))){
 	
 	Vw <- VX * pik
 	Vw %*% c(rep(1,ncol(Vw)))
-
+	
 }
 
 # calculate between-variance(QXk is age in rows and pops in columns)
@@ -118,36 +110,3 @@ Vbetween <- function(QXk, pik = rep(1/ncol(QXk),ncol(QXk))){
 	Left - Right
 }
 
-test.this <- FALSE
-if (test.this){
-# tests: what do within and between variance sum to? total?
-QXk <- cbind(qx, LT$qx[LT$Year == 2000])
-
-library(DistributionTTD)
-qx2dx <- function(qx){
-	N <- length(qx)
-	lx <- cumprod(c(1,1-qx))
-	dx <- -diff(c(lx,0))
-	dx[N] <- lx[N]
-	dx[1:N]
-}
-
-# so how to combine pops:
-dx1   <- qx2dx(QXk[,1])
-dx2   <- qx2dx(QXk[,2])
-dxtot <- dx1 + dx2
-dxtot <- dxtot / sum(dxtot)
-
-# dx2qx:
-dx2qx<- function(dx){
-	lx <- rev(cumsum(rev(dx)))
-	dx / lx
-}
-
-plot(Vbetween(QXk) + Vwithin(QXk))
-# 3 identical quantities:
-lines(getVk(dx2qx(dxtot)))
-lines(momentN(dxtot, n=2),lty=2,col="red",lwd=2)
-lx1 <- qx2lx(QXk[,1],radix=1);lx1 <- qx2lx(QXk[,2],radix=1)
-lines(getVk((lx1 * QXk[,1] + lx2 * QXk[,2])/(lx1+lx2)),col = "blue",lty=3)
-}
