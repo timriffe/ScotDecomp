@@ -3,8 +3,8 @@
 
 
 SCO <- read.csv("/home/tim/git/ScotDecomp/ScotDecomp/Data/lifetables_quintiles_scotland.csv")
-head(SCO)
 source("/home/tim/git/ScotDecomp/ScotDecomp/R/Example.R")
+
 library(reshape2)
 QX1981m <- acast(SCO[SCO$year == 1981 & SCO$sex == 1 & SCO$quintile_2 != 999, ], age ~quintile_2, value.var = "qx")
 QX1981f <- acast(SCO[SCO$year == 1981 & SCO$sex == 2 & SCO$quintile_2 != 999, ], age ~quintile_2, value.var = "qx")
