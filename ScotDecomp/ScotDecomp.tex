@@ -84,7 +84,7 @@
 
 \begin{abstract}
 Within-variance is way bigger than between variance we suppose. Let's see. And
-also see how it changes.
+also see how it changes over age and time.
 \end{abstract}
 
 \section{Hal's notes}
@@ -118,6 +118,40 @@ The second moment is defined as:
 \end{equation}
 These can be used together to calculate the variance of remaining lifespan:
 \begin{equation}
-V(\eta^{(k)}) = \eta^{(k)}_2 blA BLA
+\label{eq:var}
+V(\eta^{(k)}) = \eta^{(k)}_2 - \left[\eta^{(k)}_1 \circ \eta^{(k)}_1 \right]
 \end{equation}
+Thus far everything has been denoted with respect to the $k^{th}$ subpopulation.
+These may aggregate to a total lifetable according to some mixing distribution,
+$\pi$.
+The most natural mixture is to to give age-specific weights according to
+observed relative population counts in each subpopulation, $\pi(a,k)$. Other
+mixtures may be based on an age-pattern to $\pi$ based on the stationary
+population produced by each subpopulation's lifetable. By this method, lower
+mortality lifetables result in greater relative weight in older ages. In this
+case, weight is assigned only to the lifetable radix. Good choice might be
+assigning weight relative to the total population size of each area, or simply
+giving uniform weights. Since in our case subpopulations are aggregated into
+deprivation quantiles, they end up being of approximately equal size and the
+uniform radix mixing distribution is not very bad. 
+
+Given $\pi(a,k)$ we can decompose the variance of the total
+aggregation of subpopulations due to \eqref{eq:var} into variance due to
+stochasticity within subpopulations and variance due to differences between
+populations in the lifespan distribution. These two variance components sum to
+\eqref{eq:var} when the same $\pi(a,k)$ is used to blend lifetables for
+\eqref{eq:var} and in the following equations:
+\begin{align}
+V_{within} &= \mathbb{E}_\pi \left( V(\eta_1^{(k)})\right)\\
+ &= \sum_{k=1}^N \pi_k V(\eta_1^{(k)})
+\end{align}
+\begin{align}
+V_{between} &= V_\pi \left( V(\eta_1^{(k)})\right)\\
+ &= \sum_{k=1}^N \pi_k \left[ \eta_1^{(k)} \circ \eta_1^{(k)}\right] - \left[
+ \sum_{k=1}^N \pi_k \eta_1^{(k)} \right] \circ \left[ \sum_{k=1}^N \pi_k
+ \eta_1^{(k)} \right]
+\end{align}
+
+And that's that for now.
+
 \end{document}
