@@ -67,13 +67,15 @@ Vwithin <- function(QXk, pik = rep(1/ncol(QXk),ncol(QXk))){
 	if (missing(pik)){
 		pik <- rep(1 / ncol(QXk), ncol(QXk))
 	}
-	stopifnot(length(pik) == ncol(QXk))
+	#stopifnot(length(pik) == ncol(QXk))
 	# make sure sums to 1
-	pik <- pik / sum(pik)
+	#pik <- pik / sum(pik)
 	
 	pik <- as.matrix(pik)
 	# if it's only ncol values, then we assume stationary decrement
 	if (!all(dim(pik) == dim(QXk))){
+		# make sure sums to 1
+		pik <- pik / sum(pik)
 		LXk   <- apply(QXk, 2, getNk1)
 		LXpik <- t(LXk) * c(pik)
 		pik   <- t(LXpik %*% diag(1/colSums(LXpik)))
@@ -97,14 +99,12 @@ Vbetween <- function(QXk, pik = rep(1/ncol(QXk),ncol(QXk))){
 	if (missing(pik)){
 		pik <- rep(1 / ncol(QXk), ncol(QXk))
 	}
-	stopifnot(length(pik) == ncol (QXk))
-	
-	# make sure sums to 1
-	pik <- pik / sum(pik)
+	#stopifnot(length(pik) == ncol (QXk))
 	
 	pik <- as.matrix(pik)
 	# if it's only ncol values, then we assume stationary decrement
 	if (!all(dim(pik) == dim(QXk))){
+		pik <- pik / sum(pik)
 		LXk   <- apply(QXk, 2, getNk1)
 		LXpik <- t(LXk) * c(pik)
 		pik   <- t(LXpik %*% diag(1/colSums(LXpik)))
