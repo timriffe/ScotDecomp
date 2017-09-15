@@ -12,14 +12,14 @@ source("/home/tim/git/ScotDecomp/ScotDecomp/R/Functions.R")
 
 library(reshape2)
 
+# this makes arrays, each layer is a quintile consisting in an AP matrix
 DXm <- acast(SCO[SCO$sex == 1, ], age~year~quintile_2, value.var = "D")
 DXf <- acast(SCO[SCO$sex == 2, ], age~year~quintile_2, value.var = "D")
 NXm <- acast(SCO[SCO$sex == 1, ], age~year~quintile_2, value.var = "N")
 NXf <- acast(SCO[SCO$sex == 2, ], age~year~quintile_2, value.var = "N")
-DX <- DXm[, ,1]
-NX <- NXm[, ,1]
 
 
+# a function to deal with a layer of an array
 extrap <- function(DX, NX){
 	DX <- DX[-nrow(DX), ]
 	NX <- NX[-nrow(NX), ]
@@ -63,3 +63,5 @@ SCOlong$qx[SCOlong$age == 110] <- 1
 # quick check to see if anything stands out:
 # matplot(0:110,acast(SCOlong, age~year+quintile_2+sex,value.var="mx"),log='y',type='l')
 
+save(SCOlong, file = "/home/tim/git/ScotDecomp/ScotDecomp/Data/SCOlong.Rdata")
+# end
