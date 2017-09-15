@@ -6,7 +6,11 @@
 
 # read in data
 SCO <- read.csv("/home/tim/git/ScotDecomp/ScotDecomp/Data/lifetables_quintiles_scotland.csv")
+SCO$Fac <- 3
+SCO$Fac[SCO$year == 1991] <- 2
 
+SCO$N <- SCO$N / SCO$Fac
+SCO$D <- SCO$D / SCO$Fac
 # get maxlik kannisto functions
 source("/home/tim/git/ScotDecomp/ScotDecomp/R/Functions.R")
 

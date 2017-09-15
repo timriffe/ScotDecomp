@@ -3,7 +3,7 @@
 \usepackage{appendix}
 \usepackage{amsmath}
 \usepackage{amsthm}
-
+\usepackage{multirow}
 \usepackage{amssymb} % for approx greater than
 \usepackage{caption}
 \usepackage{placeins} % for \FloatBarrier
@@ -153,8 +153,60 @@ V_{between} &= V_\pi \left( V(\eta_1^{(k)})\right)\\
 
 \section{Results}
 
-Here are some descriptives.
 
+Here are some descriptives.
+\begin{table}[ht]
+\caption{Descriptive statistics, males}
+\centering
+\begin{tabular}{cccccccccc}
+  \hline
+ & \multicolumn{2}{c}{1981} & \multicolumn{2}{c}{1991}   &
+ \multicolumn{2}{c}{2001} &   \multicolumn{2}{c}{2011} &  \\
+  \hline
+N & \multicolumn{2}{c}{481000} & \multicolumn{2}{c}{494000} &
+\multicolumn{2}{c}{494000}  & \multicolumn{2}{c}{519000}   \\
+  $e_0$ ($e_{35}$) & 71.6 & (38.4) & 74.5 & (40.9) & 77.6 & (43.7) & 80.2 &
+  (46.3)
+  \\
+   $sd_0$ ($sd_{35}$) & 14.7 & (10.6) & 13.5 & (10.2) & 12.4 & (9.8) & 11.9
+   & (9.2) \\
+  \hline
+N & \multicolumn{2}{c}{484000}   & \multicolumn{2}{c}{470000}  &
+\multicolumn{2}{c}{491000}  & \multicolumn{2}{c}{513000}   \\
+  $e_0$ ($e_{35}$) & 69.9 & (37.1) & 72.9 & (39.5) & 75.3 & (41.9) & 78.5 &
+  (44.7)
+  \\
+  $sd_0$ ($sd_{35}$) & 15.6 & (11.0) & 14.2 & (10.7) & 14.0 & (10.5) & 13.0 &
+  (10.2)
+  \\
+   \hline
+  \multirow{ 3}{*}{3} &   N & \multicolumn{2}{c}{481000}   &
+     \multicolumn{2}{c}{480000}  & \multicolumn{2}{c}{485000}  & \multicolumn{2}{c}{513000}   \\
+  $e_0$ ($e_{35}$) & 69.1 & (36.4) & 72.1 & (38.8) & 73.9 & (40.5) & 77.0 &
+  (43.4)
+  \\
+  $sd_0$ ($sd_{35}$) & 15.7 & (11.2) & 14.6 & (10.9) & 14.3 & (11.0) & 13.6 &
+  (10.7)
+  \\
+   \hline
+ \multirow{ 3}{*}{4} &  N & \multicolumn{2}{c}{493000}   &
+   \multicolumn{2}{c}{474000}  & \multicolumn{2}{c}{485000}  & \multicolumn{2}{c}{512000}   \\
+  $e_0$ ($e_{35}$) & 68.2 & (35.5) & 70.4 & 37.6 & 72.2 & 39.1 & 75.3 & 41.7 \\ 
+  $sd_0$ ($sd_{35}$) & 15.9 & (11.3) & 15.5 & 11.2 & 15.2 & 11.4 & 14.3 & 11.4
+  \\
+   \hline
+\multirow{ 3}{*}{5} &  N & \multicolumn{2}{c}{488000}   &
+  \multicolumn{2}{c}{473000}  & \multicolumn{2}{c}{479000}  & \multicolumn{2}{c}{510000}   \\
+  $e_0$ ($e_{35}$) & 66.4 & 33.8 & 68.3 & 35.8 & 69.0 & 36.6 & 72.4 & 39.2 \\ 
+  $sd_0$ ($sd_{35}$) & 16.1 & 11.7 & 16.0 & 11.7 & 16.4 & 12.3 & 15.3 & 12.3 \\ 
+   \hline
+ \multirow{ 3}{*}{Total} & N & \multicolumn{2}{c}{2426000}   &
+  \multicolumn{2}{c}{2392000}  & \multicolumn{2}{c}{2432000}  & \multicolumn{2}{c}{2567000}   \\
+  17 & 69.0 & 36.2 & 71.6 & 38.5 & 73.5 & 40.3 & 76.7 & 43.1 \\ 
+  18 & 15.7 & 11.2 & 14.9 & 11.0 & 14.8 & 11.2 & 13.9 & 10.9 \\ 
+   \hline
+\end{tabular}
+\end{table}
 
 
 
