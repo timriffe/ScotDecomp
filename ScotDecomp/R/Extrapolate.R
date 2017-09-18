@@ -3,16 +3,28 @@
 ###############################################################################
 
 # a script to extrapolate mx from age 85+ to age 110+
+# header to determine working directory
+me <- system("whoami")
+if (me == "tim"){
+	setwd("/home/tim/git/ScotDecomp/ScotDecomp")
+}
+if (me == "mpidr_d\seaman"){
+	setwd("U:\Conferences\PAA\2018 Denver\within and between\ScotDecomp")
+}
+
+# ---------------------
+
+source("R/Functions.R")
 
 # read in data
-SCO <- read.csv("/home/tim/git/ScotDecomp/ScotDecomp/Data/lifetables_quintiles_scotland.csv")
+SCO <- read.csv("Data/lifetables_quintiles_scotland.csv")
 SCO$Fac <- 3
 SCO$Fac[SCO$year == 1991] <- 2
 
 SCO$N <- SCO$N / SCO$Fac
 SCO$D <- SCO$D / SCO$Fac
 # get maxlik kannisto functions
-source("/home/tim/git/ScotDecomp/ScotDecomp/R/Functions.R")
+
 
 library(reshape2)
 
@@ -67,5 +79,5 @@ SCOlong$qx[SCOlong$age == 110] <- 1
 # quick check to see if anything stands out:
 # matplot(0:110,acast(SCOlong, age~year+quintile_2+sex,value.var="mx"),log='y',type='l')
 
-save(SCOlong, file = "/home/tim/git/ScotDecomp/ScotDecomp/Data/SCOlong.Rdata")
+save(SCOlong, file = "Data/SCOlong.Rdata")
 # end
