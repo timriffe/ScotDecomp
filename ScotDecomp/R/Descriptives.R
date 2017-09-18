@@ -53,8 +53,14 @@ MaleTab[seq(1,16,by=3)+2,seq(1,7,2)]   <- round(mV0,1)
 MaleTab[seq(1,16,by=3)+1,seq(1,7,2)+1] <- round(me35,1)
 MaleTab[seq(1,16,by=3)+2,seq(1,7,2)+1] <- round(mV35,1)
 
-print(xtable(MaleTab,digits=1))
-?xtable
+
+print(xtable(cbind(round(SumM/1000,digits=0)),digits=0,caption="Population Size"))
+print(xtable(cbind(me0,fe0),digits=1,caption="Life Expectancy at birth"))
+print(xtable(cbind(me35,fe35),digits=1,caption="Life Expectancy at age 35"))
+print(xtable(cbind(mV0,fV0),digits=1,caption="Standard deviation, age 0"))
+print(xtable(cbind(mV35,mV35),digits=1,caption="Standard deviation, age 35"))
+
+
 # 5 dfs, 6 major rows,
 
 #library(RColorBrewer)

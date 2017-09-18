@@ -58,10 +58,10 @@ SCOB       <- as.data.frame(SCOB)
 
 mp         <- acast(SCOB[SCOB$sex == 1, ], age~year, value.var = "propB")
 fp         <- acast(SCOB[SCOB$sex == 2, ], age~year, value.var = "propB")
-mp         <- mp[-nrow(mp), ]
-fp         <- fp[-nrow(fp), ]
+mp         <- mp[1:86, ]
+fp         <- fp[1:86, ]
 # from here down not reworked yet
-a          <- 0:109
+a          <- 0:85
 
 graphics.off()
 pdf("/home/tim/git/ScotDecomp/ScotDecomp/Figures/BetweenPropMales.pdf")
@@ -92,8 +92,8 @@ dev.off()
 
 msd         <- acast(SCOB[SCOB$sex == 1, ], age~year, value.var = "sd")
 fsd         <- acast(SCOB[SCOB$sex == 2, ], age~year, value.var = "sd")
-msd         <- msd[-nrow(msd), ]
-fsd         <- fsd[-nrow(fsd), ]
+msd         <- msd[1:86, ]
+fsd         <- fsd[1:86, ]
 
 pdf("/home/tim/git/ScotDecomp/ScotDecomp/Figures/TotalsdMales.pdf")
 matplot(a, msd, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
@@ -117,3 +117,5 @@ matplot(a, fsd, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 text(70,fsd[71, "1981"], 1981, pos=2)
 text(70,fsd[71, "2011"], 2011, pos=4)
 dev.off()
+
+# end
