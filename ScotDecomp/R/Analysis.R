@@ -7,21 +7,19 @@ if (me == "tim"){
 	setwd("/home/tim/git/ScotDecomp/ScotDecomp")
 }
 if (me == "mpidr_d\seaman"){
-	setwd("U:\Conferences\PAA\2018 Denver\within and between\ScotDecomp")
+	setwd("U:/Conferences/PAA/2018 Denver/within and between/ScotDecomp")
+	
 }
 
 # ---------------------
-
+library(reshape2)
+library(data.table)
 source("R/Functions.R")
 source("R/Extrapolate.R")
 
 
-
 SCO <- local(get(load("Data/SCOlong.Rdata")))
 SCO <- SCO[SCO$quintile_2 != 999, ]
-
-library(reshape2)
-library(data.table)
 
 # calculate things manually (too much typing sorry)
 

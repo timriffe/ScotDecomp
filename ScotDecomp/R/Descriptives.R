@@ -7,7 +7,7 @@ if (me == "tim"){
 	setwd("/home/tim/git/ScotDecomp/ScotDecomp")
 }
 if (me == "mpidr_d\\seaman"){
-	setwd("U:\\Conferences\\PAA\\2018 Denver\\within and between\\ScotDecomp")
+	setwd("U:/Conferences/PAA/2018 Denver/within and between/ScotDecomp")
 }
 
 # ---------------------
@@ -19,7 +19,6 @@ source("R/Functions.R")
 #SCO <- local(get(load("/home/tim/git/ScotDecomp/ScotDecomp/Data/SCOlong.Rdata")))
 SCO     <- read.csv("Data/lifetables_quintiles_scotland.csv")
 SCOlong <- local(get(load("Data/SCOlong.Rdata")))
-head(SCO)
 
 # unadjust population size
 SCO$Fac <- 3
