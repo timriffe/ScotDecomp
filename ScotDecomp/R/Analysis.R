@@ -129,15 +129,29 @@ dev.off()
 
 # --------------------------------
 # check Hal's version:
-
+.SD <- SCO[SCO$year == 1981 & SCO$sex == 1, ]
 Byrsex <- function(.SD,w="stationary"){
-	QXkts <- acast(.SD, age ~quintile_2, value.var = "qx")
+	QXk <- acast(.SD, age ~quintile_2, value.var = "qx")
 	
 	# Hal has them stacked.
 	E <- c(apply(QXk, 2, getEta1k))
 	V <- c(apply(QXk, 2, getVk))
 	
+	pii <- apply(QXk, 2, function(qx){
+				Ui <- getNk(qx)
+				e1 <- rep(0,111)
+				e1[1] <- 1
+				t(rep(1,111))%*%(Ui %*% e1) / 5
+			})
+	
 	Ig <- diag(5)
+	eblank <- rep(0,111)
+	for (i in 1:111){
+		epi    <- eblank
+		epi[i] <- 1
+		
+	}
+	
 	# left off here. odd notation.
 	
 	if (w == "raw"){
