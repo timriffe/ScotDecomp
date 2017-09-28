@@ -4,7 +4,7 @@
 
 # a script to extrapolate mx from age 85+ to age 110+
 # header to determine working directory
-me <- system("whoami")
+me <- system("whoami",intern=TRUE)
 if (me == "tim"){
 	setwd("/home/tim/git/ScotDecomp/ScotDecomp")
 }

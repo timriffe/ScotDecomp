@@ -2,7 +2,7 @@
 ###############################################################################
 
 # header to determine working directory
-me <- system("whoami")
+me <- system("whoami",intern=TRUE)
 if (me == "tim"){
 	setwd("/home/tim/git/ScotDecomp/ScotDecomp")
 }
@@ -126,5 +126,21 @@ matplot(a, fsd, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 text(70,fsd[71, "1981"], 1981, pos=2)
 text(70,fsd[71, "2011"], 2011, pos=4)
 dev.off()
+
+# --------------------------------
+# check Hal's version:
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # end
