@@ -6,7 +6,7 @@ me <- system("whoami",intern=TRUE)
 if (me == "tim"){
 	setwd("/home/tim/git/ScotDecomp/ScotDecomp")
 }
-if (me == "mpidr_d\seaman"){
+if (me == "mpidr_d\\seaman"){
 	setwd("U:/Conferences/PAA/2018 Denver/within and between/ScotDecomp")
 	
 }
@@ -130,7 +130,35 @@ dev.off()
 # --------------------------------
 # check Hal's version:
 
-
+Byrsex <- function(.SD,w="stationary"){
+	QXkts <- acast(.SD, age ~quintile_2, value.var = "qx")
+	
+	# Hal has them stacked.
+	E <- c(apply(QXk, 2, getEta1k))
+	V <- c(apply(QXk, 2, getVk))
+	
+	Ig <- diag(5)
+	# left off here. odd notation.
+	
+	if (w == "raw"){
+		NXkts <- acast(.SD, age ~quintile_2, value.var = "N")
+		raww  <- NXkts / rowSums(NXkts)
+		out <- Vbetween(QXkts,raww)
+	}
+	out
+}
+Wyrsex <- function(.SD,w="stationary"){
+	QXkts <- acast(.SD, age ~quintile_2, value.var = "qx")
+	if (w == "stationary"){
+		out <- c(Vwithin(QXkts))
+	}
+	if (w == "raw"){
+		NXkts <- acast(.SD, age ~quintile_2, value.var = "N")
+		raww  <- NXkts / rowSums(NXkts)
+		out <- c(Vwithin(QXkts,raww))
+	}
+	out
+}
 
 
 
