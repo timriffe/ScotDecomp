@@ -1,0 +1,129 @@
+
+% new commands defined
+
+%bold faced letters
+\newcommand{\bo}[1]{{\bf #1}}
+
+\newcommand{\bm}[1]{\mbox{\boldmath $#1$}}
+\newcommand{\kron}{\otimes}
+\renewcommand{\vec}{\mbox{vec} \,}
+
+%begin and end equations
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+
+%begin and end equations without numbers
+\newcommand{\bd}{\begin{displaymath}}
+\newcommand{\ed}{\end{displaymath}}
+
+%begin and end equation arrays
+\newcommand{\bea}{\begin{eqnarray}}
+\newcommand{\eea}{\end{eqnarray}}
+
+%begin and end equation arrays without numbers
+\newcommand{\beastar}{\begin{eqnarray*}}
+\newcommand{\eeastar}{\end{eqnarray*}}
+
+%begin and end matrices
+\newcommand{\bmat}[1]{\left(\begin{array}{#1}}
+\newcommand{\emat}{\end{array}\right)}
+
+%equation numbers
+\newcommand{\enum}[1]{\label{eq:#1}}
+
+%derivatives and elasticities
+\newcommand{\der}[2]{{d #1 \over d #2}}
+\newcommand{\elas}[2]{{\varepsilon #1 \over \varepsilon #2}}
+
+
+%partial derivatives and second partial derivatives
+\newcommand{\pder}[2]{{\partial #1 \over \partial #2}}
+\newcommand{\secpderij}[3]{{\partial^2 #1 \over \partial #2 
+            \partial #3}}
+\newcommand{\tsecpderij}[3]{\partial^2 #1 / \partial #2 
+            \partial #3}  %text second partial
+
+\newcommand{\secpderii}[2]{{\partial^2 #1 \over \partial #2^2}}
+\newcommand{\tsecpderii}[2]{\partial^2 #1 / \partial #2^2}
+%   text second partial
+
+%matrix transpose symbol
+\newcommand{\tr}{{\mbox{\tiny \sf T}}}
+
+%matrix diagonal symbol
+%\newcommand{\diag}{\mbox{diag} \,}
+\newcommand{\diag}{\mathcal{D}}
+
+\newcommand{\trace}{\mbox{trace}}
+
+\newcommand{\dg}{{\rm{dg}}}
+
+% \mc{number of columns}{position}{item}
+\newcommand{\mc}[3]{\multicolumn{#1}{#2}{#3}}
+% center a single item in a table
+\newcommand{\cent}[1]{\mc{1}{c}{#1}}
+
+\newcommand{\mcal}[1]{\mathcal{#1}}
+
+
+\newcommand{\str}[1]{\rule{0in}{#1}}
+\newcommand{\tbar}[1]{\left. \rule{0in}{#1} \right|}
+
+
+
+
+
+\newcommand{\rind}{\noindent\hangindent=20pt\hangafter=1}
+
+%%%%%%%%%
+% margin adjustments
+% these are for US letter size paper; should be adjusted for A4
+%%%%%%%%
+
+\textwidth=6.5in
+ \oddsidemargin=0in
+ %\evensidemargin=0.125in
+ %\evensidemargin=0.5in
+ \textheight=9.0in
+ \topmargin=0.0in
+ \headheight=0.0in
+ \headsep=0.0in
+
+%%%%%%%%%%%%
+% end of margin adjustments
+%%%%%%%%%%%% 
+
+%%%%%% stuff from here on not used much %%%%%
+
+% \newtheorem{theorem}{Theorem}[section]
+%\newtheorem{theorem}{Theorem}
+
+%\newtheorem{example}{Example}[section]
+\newtheorem{example}{Example}
+
+    \newcommand{\exbegin}[1]{\begin{itemize} \item[~]
+
+    \begin{example}{\bf #1} \begin{rm} }
+    \newcommand{\exend}{\end{rm}\end{example}
+    \end{itemize}}
+\newcommand{\scp}[1]{\langle #1 \rangle}
+\setcounter{secnumdepth}{3}
+\setcounter{tocdepth}{4}
+
+\newtheorem{newfig}{Figure}
+\newcommand{\figbegin}{\begin{newfig} \begin{rm} }
+\newcommand{\figend}{\end{rm} \end{newfig}}
+% commands to change float restrictions
+\renewcommand{\topfraction}{0.99}
+\renewcommand{\bottomfraction}{0.99}
+\renewcommand{\textfraction}{0}
+\renewcommand{\floatpagefraction}{0}
+
+\newcommand{\mathbold}[1]{\mbox{\boldmath $\bf#1$}}
+% Shultis, Latex Notes, p. 54
+
+
+%Commands for biblist
+\newenvironment{biblist}{\begin{list}{}{\setlength{\leftmargin}{0.15in}% 
+\setlength{\itemindent}{-0.15in} \setlength{\parsep}{0.in}%
+\setlength{\itemsep}{0.1in}}}{\end{list}} 
