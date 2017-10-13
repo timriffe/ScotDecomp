@@ -141,11 +141,13 @@ Byrsex <- function(.SD,w="stationary"){
 				Ui <- getNk(qx)
 				e1 <- rep(0,111)
 				e1[1] <- 1
-				t(rep(1,111))%*%(Ui %*% e1) / 5
+				ones <- rep(1,111)
+				t(ones)%*%(Ui %*% e1) / 5
 			})
 	
 	Ig <- diag(5)
 	eblank <- rep(0,111)
+	
 	for (i in 1:111){
 		epi    <- eblank
 		epi[i] <- 1
