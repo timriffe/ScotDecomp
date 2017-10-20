@@ -1,6 +1,9 @@
 # Author: tim
 ###############################################################################
 
+# TODO: make graphs of within and between variance
+
+
 # header to determine working directory
 me <- system("whoami",intern=TRUE)
 if (me == "tim"){
@@ -64,7 +67,7 @@ SCOB$propB <- SCOB$B / SCOB$V
 SCOB$sd    <- sqrt(SCOB$V)
 
 SCOB       <- as.data.frame(SCOB)
-
+head(SCOB[SCOB$age == 35, ])
 mp         <- acast(SCOB[SCOB$sex == 1, ], age~year, value.var = "propB")
 fp         <- acast(SCOB[SCOB$sex == 2, ], age~year, value.var = "propB")
 mp         <- mp[1:86, ]

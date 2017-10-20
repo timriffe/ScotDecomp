@@ -48,7 +48,7 @@ getEta2k <- function(qx){
 getVk  <- function(qx){
 	Eta1 <- getEta1k(qx)
 	Eta2 <- getEta2k(qx)
-	Eta2 - Eta1 ^ 2
+	Eta2 - Eta1 ^ 2 # same as Eta1 * Eta1
 }
 
 # calculate within-variance (QXk is age in rows and pops in columns)
@@ -67,16 +67,18 @@ Vwithin <- function(QXk, pik = rep(1/ncol(QXk),ncol(QXk))){
 	# if it's only ncol values, then we assume stationary decrement
 	if (!all(dim(pik) == dim(QXk))){
 		# make sure sums to 1
-		pik <- pik / sum(pik)
+		pik   <- pik / sum(pik)
+		# i.e. pick out first column of Nk matrix, taken to mean lx.
 		LXk   <- apply(QXk, 2, getNk1)
 		LXpik <- t(LXk) * c(pik)
-		pik   <- t(LXpik %*% diag(1/colSums(LXpik)))
+		# this divides each row by its sum. So each row is now pi(x)
+		pik   <- t(LXpik %*% diag(1 / colSums(LXpik)))
 	}
-	
+	# each column is variance at age x for quintile k
 	VX <- apply(QXk, 2, getVk)
 	
 	Vw <- VX * pik
-	Vw %*% c(rep(1,ncol(Vw)))
+	Vw %*% c(rep(1, ncol(Vw)))
 	
 }
 
