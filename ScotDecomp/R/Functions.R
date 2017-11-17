@@ -17,7 +17,9 @@ getUk <- function(qx){
 # get N from qx (conditional lx)
 getNk <- function(qx){
 	Uk <- getUk(qx)
-	Nk <- solve(diag(length(qx))-Uk)
+	Nk <- solve(
+			diag(length(qx)) - Uk
+	)
 	Nk
 }
 # just to get lx starting from 0
@@ -36,6 +38,7 @@ getEta1k <- function(qx){
 	ones <- rep(1,N)
 	t(t(ones) %*% Nk)
 }
+
 # get eta 2 from qx
 getEta2k <- function(qx){
 	N    <- length(qx)
@@ -78,6 +81,7 @@ Vwithin <- function(QXk, pik = rep(1/ncol(QXk),ncol(QXk))){
 	VX <- apply(QXk, 2, getVk)
 	
 	Vw <- VX * pik
+	# this makes rowsums
 	Vw %*% c(rep(1, ncol(Vw)))
 	
 }
@@ -109,6 +113,7 @@ Vbetween <- function(QXk, pik = rep(1/ncol(QXk),ncol(QXk))){
 	Left  <- rowSums((Eta1s ^ 2) * pik)
 	Right <- rowSums(Eta1s * pik) ^ 2
 	#((Eta1s ^ 2) %*% pik) - ((Eta1s %*% pik) ^ 2)
+	# aka between variance
 	Left - Right
 }
 
