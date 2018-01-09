@@ -19,7 +19,7 @@ source("R/Functions.R")
 #SCO <- local(get(load("/home/tim/git/ScotDecomp/ScotDecomp/Data/SCOlong.Rdata")))
 SCO     <- read.csv("Data/lifetables_quintiles_scotland.csv")
 SCOlong <- local(get(load("Data/SCOlong.Rdata")))
-
+SCOB    <- local(get(load("Data/SCOB.Rdata")))
 # unadjust population size
 SCO$Fac <- 3
 SCO$Fac[SCO$year == 1991] <- 2
@@ -55,9 +55,45 @@ write.csv(SCOcsv, file = "Data/descriptives.csv", row.names = FALSE)
 #SumF <- t(Sums[,,2])
 #
 ## e0
-#me0  <- acast(SCO[SCO$age==0 & SCO$sex == 1, ], quintile_2 ~ year, value.var = "ex")
-#fe0  <- acast(SCO[SCO$age==0 & SCO$sex == 2, ], quintile_2 ~ year, value.var = "ex")
+years <- sort(unique(SCO$year))
+library(reshape2)
+me0  <- acast(SCO[SCO$age==0 & SCO$sex == 1, ], quintile_2 ~ year, value.var = "ex")
+fe0  <- acast(SCO[SCO$age==0 & SCO$sex == 2, ], quintile_2 ~ year, value.var = "ex")
+matplot(years,t(me0),type='l',
+		col=c(gray(seq(0,.7,length=5)),"blue"),
+		lty=1,
+		lwd=c(seq(.7,2,length=5),3),las=1,xaxt="n",
+		ylab = "LE",xlab = "Year",ylim=c(66,83))
+axis(1,years)
+
+matplot(years,t(fe0),type='l',
+		col=c(gray(seq(0,.7,length=5)),"blue"),
+		lty=2,
+		lwd=c(seq(.7,2,length=5),3),las=1,xaxt="n",
+		ylab = "LE",xlab = "Year",add=TRUE)
+#axis(1,years)
+mV0  <- acast(SCO[SCO$age==0 & SCO$sex == 1, ], quintile_2 ~ year, value.var = "sd")
+fV0  <- acast(SCO[SCO$age==0 & SCO$sex == 2, ], quintile_2 ~ year, value.var = "sd")
+matplot(years,t(mV0),type='l',
+		col=c(gray(seq(0,.7,length=5)),"blue"),
+		lty=1,
+		lwd=c(seq(.7,2,length=5),3),las=1,xaxt="n",
+		ylab = "LE",xlab = "Year",ylim=c(12.5,17.5))
+axis(1,years)
+
+matplot(years,t(fV0),type='l',
+		col=c(gray(seq(0,.7,length=5)),"blue"),
+		lty=2,
+		lwd=c(seq(.7,2,length=5),3),las=1,xaxt="n",
+		ylab = "LE",xlab = "Year",add=TRUE)
 #
+maxA <- function(x,age=1:length(x)-1,trunc = 80){
+	which.max(x[age<trunc])-1
+}
+tapply(SCOB$propB[SCOB$sex == 1 ],SCOB$year[SCOB$sex == 1 ],maxA)
+tapply(SCOB$propB[SCOB$sex == 2 ],SCOB$year[SCOB$sex == 2 ],maxA)
+
+
 ## e35
 #me35 <- acast(SCO[SCO$age==35 & SCO$sex == 1, ], quintile_2 ~ year, value.var = "ex")
 #fe35 <- acast(SCO[SCO$age==35 & SCO$sex == 2, ], quintile_2 ~ year, value.var = "ex")
