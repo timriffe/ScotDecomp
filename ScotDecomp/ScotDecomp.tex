@@ -90,7 +90,17 @@
 
 \begin{abstract}
 Mortality inequalities demonstrate a double burden: the most deprived socioeconomic
-groups experience the lowest average age of death and the highest variation in age at death. Two underlying processes drive variation in age at death: individual stochasticity (within-group variance) and heterogeneity (between-group inequality). Limited research has evaluated how these two components have changed over time. We address this research gap by using population and mortality data for the entire population of Scotland stratified by a validated measure of area-level deprivation that covers the time period 1981-2011. The most deprived areas have experienced stagnating or slight increasing variance in age at death and the least deprived areas have experienced decreasing variance. This is consistent with the existing literature demonstrating that there is not simply a social gradient for variation in age at death but that socioeconomic groups have experienced diverging trends. While the relative contributions from within-group inequality did not change over the study period the relative contributions from between-group inequality increased, indicating relatively greater importance of area level mortality differences for total variation in age at death.  
+groups experience the lowest average age of death and the highest variation in
+age at death. Two processes generate variation in age at death: individual
+stochasticity (within-group variance) and heterogeneity (between-group
+inequality). Limited research has evaluated how these two components have
+changed over time. We address this research gap by using population and
+mortality data for the entire population of Scotland stratified by a validated
+measure of area-level deprivation that covers the time period 1981-2011. The
+most deprived areas have experienced stagnating or slight increasing variance in
+age at death and the least deprived areas have experienced decreasing variance.
+This is consistent with the existing literature demonstrating that there is not
+simply a social gradient for variation in age at death but that socioeconomic groups have experienced diverging trends. While the contributions from within-group inequality did not change over the study period, the contributions from between-group inequality increased, indicating relatively greater importance of area level mortality differences for total variation in age at death.
 \end{abstract}
 
 \section{Background}
@@ -99,30 +109,126 @@ evidenced by life expectancy comparisons. The most deprived populations
 experience the lowest average age of death, and the least deprived populations
 experience the highest. Studies have further demonstrated that the most deprived
 populations also demonstrate the highest level of variation in age at death when
-measuring socioeconomic inequality by income, education, or occupation \citep{Broennum-Hansen2017,Raalte2011,Sasson2016,Raalte2014}. The patterning of these two dimensions of mortality represent a double burden of inequality and routine monitoring of both is important for evaluating the extent to which improving average mortality and reducing inequalities are being achieved simultaneously. 
+measuring socioeconomic inequality by income, education, or occupation
+\citep{Broennum-Hansen2017,Raalte2011,Sasson2016,Raalte2014}. The patterning of these two dimensions of mortality represents a double burden of inequality and routine monitoring of both is important for evaluating the extent to which improving average mortality and reducing inequalities are being achieved simultaneously.
 
-A number of highly correlated indices exist for estimating the amount of variance in age at death \citep{Raalte2013} with relatively low and decreasing variance being interpreted as decreasing uncertainty for individuals. For societies, relatively low and decreasing variance means that the risk of premature death is being reduced for the population which, in turn, may reflect a more efficient social security system with higher welfare redistribution  \citep{Raalte2012,Bambra2011,Popham2013}. 
+ADD PARAGRAPH
+Why do we think life disparity is a burden. 1) life planability, the ability to
+anticipate and adapt to one's future, whether consious or not constrains and
+conditions important life transitions and investments in health and education in
+the present. Make sense of that. 2) because it's mostly due to excess premature
+mortality. All premature mortality is bad, but within that we can still say that
+some is excessive and some is to be expected, namely. 3) governments would
+prefer to have lower variance-- see Alyson's argument. 
+
+How variance can be misinterpreted: there is early and late mortality, both of
+which add to variance, and of which we consider early to be bad and late to be
+good. It is perfectly possible for select subgroups to experience increases in
+variance due to a long right tail in the deaths distribution, but such cases are
+not. Respond to people who think this might be age discrinating in some
+thoughtful engaging way.
+------------------
+
+A number of highly correlated indices measure disparity in age at
+death \citep{Raalte2013}, where low disparity indicates less uncertainty in age
+at death for individuals. For societies, relatively low and decreasing disparity
+means that the risk of premature death is being reduced for the population which, in turn, may reflect a more efficient social security system with higher welfare redistribution 
+\citep{Raalte2012,Bambra2011,Popham2013}.\footnote{Disparity comes from both
+premature deaths and deaths at very old ages, and theoretically the latter could
+drive increasing variance, but this is not the case for Scotland or any of its
+deprivation quantiles.} We use lifetable variance to quantify disparity for
+two reasons: 1) There is a well-known analytic method to decompose variance
+into within and between group components. 2) We can transform variance into
+standard deviations to report results in year units.
  
 Two processes underly the total variance in age at death: individual
 stochasticity (within-group variance) and heterogeneity (between-group
 inequality). Within-group variance tends to arise from differences due to random
 demographic processes. The lifetable assumes that every individual, at the same age, is subject
 to the same schedule of mortality rates, such that any
-variance in age of death can be interpreted as individual stochasticity. However, it can also be argued that within-group variance could be due to the lifetable actually being aggregated over heterogeneous populations. For example males and females experience different social and biological processes that mean they demonstrate different mortality schedules. Aggregating over both sexes would increase within-group variance because you are systematically aggregating over two groups that are known to be heterogeneous and that have age distributions which do not completely overlap. It is also possible that a lifetable could be produced for populations that are heterogeneous but without knowing the reasons why the mortality of the populations are disparate and being unable to produce stratified lifetables.    
+variance in age of death can be interpreted as individual stochasticity.
+Within-group variance can also be due to unaccounted for subgroup heterogeneity.
+For example males and females have different mortality schedules. Aggregating
+a lifetable over both sexes increases within-group variance due to induced
+between group heterogeneity, even if males and females have identical
+within-group variance. Within-group variance is theoretically always inflated
+due to heterogeneity on unmeasured characteristics of the population. For
+example, we cannot stratify our lifetables on other characteristics such as
+marital, employment, or diabetes status. These and similar individual
+characteristics that one could hypothetically group on will likely account for a
+non-trivial fraction of within group variance.
+%It is also
+%possible that a lifetable could be produced for populations that are
+% heterogeneous but without knowing the reasons why the mortality of the populations are disparate and being unable to produce stratified lifetables.
 
-Between-group inequality can arise if individuals at the same age are subject to different mortality rates that may be due to exposures to different social, economic or environmental contexts \citep{Hartemink2017}. One existing study estimated the contribution of educational inequalities (the between-group component) to the total variance in age at death for 11 individual European countries. For males in Sweden the between-group component accounted for 1.7\% of the total variance in age at death but for males in the Czech Republic it accounted for 10.9\% of total variance in
-age at death \citep{Raalte2012}. The between-group component was higher in the Czech Republic because the age distributions of death, stratified by education, are more disparate than in Sweden. Noted was the distinct age distribution for the least educated males in the Czech Republic. However, this study used aggregated data for the
-years 1990 to 2000, such that time trends for the between-group and within-group components could not be assessed. In addition, it recognised that education may be a problematic socioeconomic measure for studying changes in the between-group components
-over time due to compositional changes to educational group sizes \citep{Hendi2015}. A further limitation when stratifying data by education, or other socioeconomic states that are theoretically acquired over the life course, is that researchers may be forced to left-truncate data
-at a justifiable age which the data also permit (although \citet{Broennum-Hansen2017} used an indicator of disposable income that does not require age truncation, results were still reported as age conditional). Area level measures of relative deprivation, although not interchangeable with individual level socioeconomic measures , can help to over come these practical limitations and also have a number of theoretical advantages.
+Between-group lifespan inequality arises when individuals at the same age are
+subject to different mortality rates, which may be due to exposures to
+different social, economic, or environmental contexts \citep{Hartemink2017}.
+\citet{Raalte2012} estimates the contribution of educational inequalities (the
+between-group component) to the total variance in age at death for 11 individual European countries. For males in Sweden the between-group component accounted for 1.7\% of the total variance in age at death but for males in the Czech Republic it accounted for 10.9\% of total variance in age at death. The between-group component was higher in the Czech Republic because the age distributions of death, stratified by education, are more disparate than in Sweden. 
+%Noted was the distinct age distribution for the least educated males in the
+% Czech Republic. 
+\citet{Raalte2012} used data aggregated over 1990 to 2000, such
+that time trends for the between-group and within-group components could not be assessed. 
+% check- is that in said paper, ir did it come from Hendi?
+In addition, it recognised that education may be a problematic socioeconomic
+measure for studying trends in between-group components due to
+changes in educational composition and the meanining of education attainment
+\citep{Hendi2015}.
+A further limitation when stratifying data by education, or other socioeconomic
+states that are theoretically acquired over the life course, is that researchers
+may need to left-truncate data at some age because education is aqcuired
+over the life course. 
+%(although
+%\citet{Broennum-Hansen2017} used an indicator of disposable household income
+%that does not require age truncation, results were still reported as age
+% conditional).
+Area level measures of relative deprivation, although not interchangeable with individual level socioeconomic measures, can help to over come these practical limitations and also have a number of theoretical advantages.
  
-Firstly, relative deprivation is the idea that not having enough material cultural or social resources to participate in the accepted way of life in one's societal context is as important for health as the absolute minimum requirements for survival (absolute poverty) \citep{Townsend1987,Carstairs1989,Kearns2000,Kawachi2002}. This means that relative measures of deprivation have a theoretically consistent interpretation over time, particularly when weighting groups by population size: even though absolute levels of poverty in the population will have improved there is always a notional most deprived group compared to the same sized notional least deprived group. Secondly, assigning individuals to an area level measure of deprivation based on their post-code (zip-code) is pragmatic: home address is routinely collected across all stages of the life course and across a range of health services while measures of income, occupation or education are not. Thirdly, area of residence is not an age dependent or acquired social state. Therefore, age truncation is not necessary and few members of the population will be excluded (students, the unemployed and retirees for example can all be included). Fourthly, area level indicators are also derived from routinely collected data which allows for regular updates and makes them a powerful tool for governments assessing how best to distribute resources. Finally, area level deprivation may have an influence on risk of death independent of individual level socioeconomic circumstance\citep{Carstairs1989,Macintyre2002,Tunstall2011}. Although empirical results are mixed it remains valuable to understand that mortality outcomes are not only driven by characteristics of individuals but also by the collective and contextual characteristics of areas \citep{Macintyre2002}. 
+First, relative deprivation is the idea that not having enough material cultural
+or social resources to participate in the accepted way of life in one's societal
+context. Relative deprivation is as important for health as the absolute
+minimum requirements for survival (absolute poverty)
+\citep{Townsend1987,Carstairs1989,Kearns2000,Kawachi2002}. When stratifying
+groups on quantiles, relative measures of deprivation likely have a
+more consistent interpretation over time than do absolute measures. Although
+absolute levels of poverty in Scotland have improved there is always a notional
+most deprived fraction of the population. 
 
-We contribute to the mortality inequalities literature by measuring the changing contributions from within-group and
-between-group components of total variance in age at death. Data are the most robust Census population
-estimates and mortality data stratified into population-weighted quintiles (20\%) according to a validated area-level measure of relative deprivation (Carstairs score). The data
-include the whole population of Scotland (ca 5 million persons) and cover the
-time period between 1981 and 2011. 
+ROSIE: think on this. Is it pragmatic to assign postal code area deprivation to
+individuals because it is derived from those same individuals? And because
+these areas are small and presumably more homogenously composed than are
+alternative large areas. We know there is segrations (Sabater.. bla bla)
+
+ Second, assigning
+individuals to an area level measure of deprivation based on their post-code is pragmatic: Home
+address is routinely collected across all stages of the life course and
+passively by a range of health services, while measures of income, occupation,
+or education are not. 
+
+Third, area of residence is less age dependent than educational attainment or
+other similar SES categories.
+Therefore, age truncation is not necessary and few members of the population
+are excluded.\footnote{Students, the unemployed, and retirees for example are
+included. Military bases and offshore drilling stations are not assigned
+Carstairs scores, and deaths ocurring in these places are also excluded.}
+
+AH HA- confusion is due to area measures derived from people in area vs
+contextual attributes of the area such as number of hospitals, distance to bla
+bla. Clarify following sentence wrt first sentence in paragraph.
+
+ Fourth, area
+level indicators are also derived from routinely collected data which allows for
+regular updates and makes them a powerful tool for governments assessing how best to distribute resources. Finally, area level deprivation may have an influence on risk of death independent of individual level socioeconomic circumstance \citep{Carstairs1989,Macintyre2002,Tunstall2011}. Although empirical results are mixed it remains valuable to understand that mortality outcomes are not only driven by characteristics of individuals but also by the collective and contextual characteristics of areas \citep{Macintyre2002}.
+
+We contribute to the mortality inequalities literature by measuring the changing contributions from within and
+between-group components to variance in age at death. Data are centered on
+Census years, ensuring the most robust population estimates available.
+Populations in each postal code are aggregated base on population-weighted
+quintiles of the Carstairs score distribution. Death counts are
+matched to postal codes based on place of usual residence and then aggregated
+on Carstairs quintiles. The data include the whole population of Scotland (ca 5
+million persons) and cover the time period between 1981 and 2011.
 
 \section{Data and methods}
 

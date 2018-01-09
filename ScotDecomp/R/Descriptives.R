@@ -140,3 +140,12 @@ tapply(SCOB$propB[SCOB$sex == 2 ],SCOB$year[SCOB$sex == 2 ],maxA)
 #
 #
 #
+head(SCOB)
+head(SCOB)
+me0  <- acast(SCOB[SCOB$sex == 1, ], age ~ year, value.var = "V")
+fe0  <- acast(SCOB[SCOB$sex == 2, ], age ~ year, value.var = "V")
+
+matplot(0:110, me0, type = 'l')
+
+
+# make a graph: what proportion of variance in each age comes from ages 85+ (extrapolated ages)
