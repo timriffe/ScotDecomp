@@ -134,6 +134,7 @@ text(70,fsd[71, "2011"], 2011, pos=4)
 dev.off()
 
 # new graphs as of 17-Nov-2017
+
 # absolute var between:
 mb         <- acast(SCOB[SCOB$sex == 1, ], age~year, value.var = "Bst")
 fb         <- acast(SCOB[SCOB$sex == 2, ], age~year, value.var = "Bst")
@@ -160,6 +161,63 @@ matplot(a, fb, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 
 text(c(15,20,15,20),fb[21,],c(1981,1991,2001,2011),pos=c(1,3,3,3)) 
 dev.off()
+
+# new graphs as of 23-Jan-2018
+# absolute var within:
+mw         <- acast(SCOB[SCOB$sex == 1, ], age~year, value.var = "Wst")
+fw         <- acast(SCOB[SCOB$sex == 2, ], age~year, value.var = "Wst")
+mw         <- mw[1:86, ]
+fw         <- fw[1:86, ]
+
+pdf("Figures/TotalwstMales.pdf")
+matplot(a, mw, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
+		lty=1,
+		ylab = "within variance",xlab = "Age", #ylim = c(0,9),
+		main = "",
+		las = 1,
+		cex.lab = 1.4,
+		ylim = c(0,260))
+text(20,mw[21,],c(1981,1991,2001,2011)) 
+dev.off()
+
+pdf("Figures/TotalwstFemales.pdf")
+matplot(a, fw, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
+		lty=1,
+		ylab = "within variance",xlab = "Age", #ylim=c(0,9),
+		main = "",
+		las = 1,
+		cex.lab = 1.4,
+		ylim = c(0,260))
+
+text(c(15,20,15,20),fb[21,],c(1981,1991,2001,2011),pos=c(1,3,3,3)) 
+dev.off()
+
+# proportion within
+pdf("Figures/WithinPropMales.pdf")
+matplot(a, mw/mv, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
+		lty=1,
+		ylab = "within variance",xlab = "Age", ylim = c(.96,1),
+		main = "",
+		las = 1,
+		cex.lab = 1.4)
+		#ylim = c(0,260))
+text(20,mw[21,]/mv[2,1],c(1981,1991,2001,2011)) 
+dev.off()
+
+pdf("Figures/WithinPropFemales.pdf")
+matplot(a, fw/fv, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
+		lty=1,
+		ylab = "within variance",xlab = "Age", ylim=c(.96,1),
+		main = "",
+		las = 1,
+		cex.lab = 1.4)
+		#ylim = c(0,260))
+
+text(c(15,20,15,20),fb[21,]/fv[21,],c(1981,1991,2001,2011),pos=c(1,3,3,3)) 
+dev.off()
+
+
+
 
 
 # --------------------------------

@@ -238,29 +238,34 @@ came from 1980-1982, 1990-1991, 2000-2002 and 2010-2012 to increase the
 number of events centered around each census. 1990-1991 is just a two-year
 numerator sample due to geographical boundary changes occurring in 1990.
 Corresponding Census population estimates are adjusted accordingly.} by single
-year of age and sex for each part-postcode (zip-code) sector in Scotland were obtained via a commissioned request to National Records of Scotland. There are around 1,012 part-postcode sectors in Scotland at each Census year each with an average population size of 5,000 individuals\footnote{1981 total number of postcode sectors=1010, Mean population (SD) =4982.47 (1178.53) 
-  1991 total number of postcode sectors=1001 mean population (SD) 4993.02 (1653.67). 2001 total number of postcode sectors=1010 mean population (SD) =5011.89 (1542.42). 2011 total number of postcode sectors=1012 mean population (SD) =5232.61 (1568.05)}.
+year of age and sex for each part-postcode (zip-code) sector in Scotland were
+obtained via a commissioned request to National Records of Scotland. There are
+around 1,012 part-postcode sectors in Scotland at each Census year each with an
+average population size of 5,000 individuals\footnote{MAKE TABLE: 1981 total
+number of postcode sectors=1010, Mean population (SD) =4982.47 (1178.53) 1991 total number of postcode sectors=1001 mean population (SD) 4993.02 (1653.67). 2001 total number of postcode sectors=1010 mean population (SD) =5011.89 (1542.42). 2011 total number of postcode sectors=1012 mean population (SD) =5232.61 (1568.05)}.
  
 Population-weighted quintiles (each 20\% of the population) were created by
-aggregating the 1,012 part-postcode sectors according to Carstairs score of
+aggregating the 1,012 part-postcode sectors ordered on Carstairs score of
 deprivation. (INTEND TO ADD IN 4 MAPS OF SCOTLAND HERE SHOWING THE GEOGRAPHICAL OUTLINES OF EACH POSTCODE SECTOR AND THE QUINTILE OF DEPRIVATION IT WAS ASSIGNED TO AT EACH CENSUS YEAR). The Carstairs score is a z-score for each part-postcode sector
 that is derived from four individual-level census variables: overcrowding, male
-unemployment, low social class, and no car ownership. The Carstairs Score
+unemployment, low social class, and car ownership. The Carstairs Score
 (z-score) reflects the material resources that provide the means to access the
 goods, services, amenities, and physical environment seen as expected
-in society \citep{Carstairs1989}. This means the Carstairs score is a method of capturing relative deprivation at the contextual level. A higher score indicates relatively higher deprivation than the national level and a lower score (below zero) indicates relatively lower deprivation than the national level.
+in society \citep{Carstairs1989}. This means the Carstairs score is a method of
+capturing relative deprivation at the contextual level (cite). Scores range from
+XXX to XXX and are centered on zero, with higher scores indicating relatively
+higher deprivation than the national level.
 
 Deaths and Census population denominators were used to construct complete
-lifetables for each deprivation quintile, at each Census year, for males and
-females seperately (40 lifetables in total). The Human Mortality Database
-protocol was used to extrapolate age specific mortality rates from ages 85 to
-110 \citep{Wilmoth2007}.\footnote{Specifically, we apply equations (53) and
-(54) from the HMD protocol v5, modified to use information from ages 75+
+lifetables for each deprivation quintile, centered on each Census year, for
+males and females seperately. The Human Mortality Database
+Methods Protocol was used to extrapolate age specific mortality rates from
+ages 85 to 110 \citep{Wilmoth2017}.\footnote{Specifically, we apply equations (53) and
+(54) from the HMD protocol v6, modified to use information from ages 75+
 rather than 80+.} From the complete lifetables we compute remaining
-life expectancy and the conditional standard deviation of the remaining lifespan
-distribution. Lifetable standard deviations are a common measure of the
-variability applied to the distribution of age at death \citep{Raalte2013}. Lifetable variance is calculated and decomposed into within- and between-group
-components using Markov chain methods \citep{Caswell2001}\citep{Caswell2009}\citep{Caswell2014}. Details of the within-group and between-group component calculations are given in the supplementary files.
+life expectancy and the conditional variance and standard deviation of
+the remaining lifespan distribution. Lifetable standard deviations are a common
+measure of the variability applied to the distribution of age at death \citep{Raalte2013}. Lifetable variance is calculated and decomposed into within- and between-group components using Markov chain methods \citep{Caswell2001}\citep{Caswell2009}\citep{Caswell2014}. Details of the within-group and between-group component calculations are given in the supplementary files.
 
 
 \subsection{Variance decomposition}
