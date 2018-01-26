@@ -201,7 +201,7 @@ matplot(a, mw/mv, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 		las = 1,
 		cex.lab = 1.4)
 		#ylim = c(0,260))
-text(20,mw[21,]/mv[2,1],c(1981,1991,2001,2011)) 
+text(20,mw[21,]/mv[21,],c(1981,1991,2001,2011),pos=3) 
 dev.off()
 
 pdf("Figures/WithinPropFemales.pdf")
@@ -213,7 +213,7 @@ matplot(a, fw/fv, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 		cex.lab = 1.4)
 		#ylim = c(0,260))
 
-text(c(15,20,15,20),fb[21,]/fv[21,],c(1981,1991,2001,2011),pos=c(1,3,3,3)) 
+text(c(15,20,15,20),fw[21,]/fv[21,],c(1981,1991,2001,2011),pos=c(3,1,1,1)) 
 dev.off()
 
 
