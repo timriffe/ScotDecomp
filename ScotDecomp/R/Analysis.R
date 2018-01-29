@@ -168,7 +168,10 @@ mw         <- acast(SCOB[SCOB$sex == 1, ], age~year, value.var = "Wst")
 fw         <- acast(SCOB[SCOB$sex == 2, ], age~year, value.var = "Wst")
 mw         <- mw[1:86, ]
 fw         <- fw[1:86, ]
-
+mv         <- acast(SCOB[SCOB$sex == 1, ], age~year, value.var = "V")
+fv         <- acast(SCOB[SCOB$sex == 2, ], age~year, value.var = "V")
+mv         <- mv[1:86, ]
+fv         <- fv[1:86, ]
 pdf("Figures/TotalwstMales.pdf")
 matplot(a, mw, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 		lty=1,
@@ -196,7 +199,7 @@ dev.off()
 pdf("Figures/WithinPropMales.pdf")
 matplot(a, mw/mv, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 		lty=1,
-		ylab = "within variance",xlab = "Age", ylim = c(.96,1),
+		ylab = "Proportion",xlab = "Age", ylim = c(.96,1),
 		main = "",
 		las = 1,
 		cex.lab = 1.4)
@@ -207,7 +210,7 @@ dev.off()
 pdf("Figures/WithinPropFemales.pdf")
 matplot(a, fw/fv, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 		lty=1,
-		ylab = "within variance",xlab = "Age", ylim=c(.96,1),
+		ylab = "Proportion",xlab = "Age", ylim=c(.96,1),
 		main = "",
 		las = 1,
 		cex.lab = 1.4)
