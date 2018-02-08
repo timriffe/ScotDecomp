@@ -78,6 +78,13 @@ fp         <- fp[1:86, ]
 # from here down not reworked yet
 a          <- 0:85
 
+maxA <- function(x,age=1:length(x)-1,trunc = 80){
+	which.max(x[age<trunc])-1
+}
+malemax   <- tapply(SCOB$propB[SCOB$sex == 1 ],SCOB$year[SCOB$sex == 1 ],maxA)
+femalemax <- tapply(SCOB$propB[SCOB$sex == 2 ],SCOB$year[SCOB$sex == 2 ],maxA)
+
+
 graphics.off()
 pdf("Figures/BetweenPropMales.pdf")
 matplot(a, mp, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
@@ -86,8 +93,13 @@ matplot(a, mp, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 		main = "",
 		las = 1,
 		cex.lab = 1.4)
-abline(v=35)
-text(20,mp[21, ], c(1981,1991,2001,2011),pos=3,cex=1)
+#abline(v=35)
+text(10,mp[11, ], c(1981,1991,2001,2011),pos=3,cex=1)
+for (i in 1:4){
+	points(malemax[i],mp[malemax[i]+1, i], pch = 16)
+	text(malemax[i],mp[malemax[i]+1, i],malemax[i],pos=1)
+}
+
 dev.off()
 
 pdf("Figures/BetweenPropFemales.pdf")
@@ -97,8 +109,11 @@ matplot(a, fp, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 		main = "",
 		las = 1,
 		cex.lab = 1.4)
-abline(v=35)
-text(40,fp[41, ], c(1981,1991,2001,2011),pos=c(1,3,3,3),cex=1)
+text(10,fp[11, ], c(1981,1991,2001,2011),pos=c(1,3,3,3),cex=1)
+for (i in 1:4){
+	points(femalemax[i],fp[femalemax[i]+1, i], pch = 16)
+	text(femalemax[i],fp[femalemax[i]+1, i],femalemax[i],pos=1)
+}
 dev.off()
 
 
@@ -192,7 +207,7 @@ matplot(a, fw, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 		cex.lab = 1.4,
 		ylim = c(0,260))
 
-text(c(15,20,15,20),fb[21,],c(1981,1991,2001,2011),pos=c(1,3,3,3)) 
+text(c(15,20,15,20),fw[21,],c(1981,1991,2001,2011),pos=c(1,3,3,3)) 
 dev.off()
 
 # proportion within
@@ -204,7 +219,7 @@ matplot(a, mw/mv, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 		las = 1,
 		cex.lab = 1.4)
 		#ylim = c(0,260))
-text(20,mw[21,]/mv[21,],c(1981,1991,2001,2011),pos=3) 
+text(10,mw[11,]/mv[11,],c(1981,1991,2001,2011),pos=3) 
 dev.off()
 
 pdf("Figures/WithinPropFemales.pdf")
@@ -216,7 +231,7 @@ matplot(a, fw/fv, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 		cex.lab = 1.4)
 		#ylim = c(0,260))
 
-text(c(15,20,15,20),fw[21,]/fv[21,],c(1981,1991,2001,2011),pos=c(3,1,1,1)) 
+text(10,fw[11,]/fv[11,],c(1981,1991,2001,2011),pos=c(3,1,1,1)) 
 dev.off()
 
 
