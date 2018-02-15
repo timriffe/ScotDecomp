@@ -322,6 +322,8 @@ SCO$mx_amn_sm      <- SCO$agg_amn_frac_sm * SCO$mxsm
 SCO$mx_resp_sm     <- SCO$agg_resp_frac_sm * SCO$mxsm
 SCO$mx_circ_sm     <- SCO$agg_circular_frac_sm * SCO$mxsm
 
+write.csv(SCO,file="Data/SCOCOD.csv")
+
 # visual diagnostic
 SCOL               <-  split(SCO, list(SCO$year, SCO$sex, SCO$quintile))
 
@@ -538,4 +540,3 @@ dev.off()
 #hist(check2$ed0-check2$ed0sm)
 #
 #plot(SCO$mx[1:110],log='y')
-head(SCO)
