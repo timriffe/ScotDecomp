@@ -104,21 +104,23 @@ dev.off()
 
 pdf("Figures/BetweenPropMalesRelChg.pdf")
 percChgm <- 100*t(mp[c(1,31), ] / mp[c(1,31), 1])
-matplot(c(1981,1991,2001,2011),percChgm, type = 'l', 
+matplot(c(1981,1991,2001,2011),percChgm, type = 'o', 
 		ylab = "relative change (%) in prop between",
 		xlab = "Year",
 		ylim=c(100,280),
-		las = 1)
+		las = 1,
+		pch= 16)
 text(2001, percChgm[3,]-20, c("Age 0", "Age 30"), pos = 1)
 dev.off()
 
 pdf("Figures/BetweenPropFemalesRelChg.pdf")
 percChgf <- 100*t(fp[c(1,31), ] / fp[c(1,31), 1])
-matplot(c(1981,1991,2001,2011),percChgf, type = 'l', 
+matplot(c(1981,1991,2001,2011),percChgf, type = 'o', 
 		ylab = "relative change (%) in prop between",
 		xlab = "Year",
 		ylim=c(100,280),
-		las = 1)
+		las = 1,
+		pch= 16)
 text(2001, percChgf[3,]-5, c("Age 0", "Age 30"), pos = 1)
 dev.off()
 
