@@ -19,7 +19,7 @@ source("R/Functions.R")
 #SCO <- local(get(load("/home/tim/git/ScotDecomp/ScotDecomp/Data/SCOlong.Rdata")))
 SCO     <- read.csv("Data/lifetables_quintiles_scotland.csv")
 SCOlong <- local(get(load("Data/SCOlong.Rdata")))
-SCOB    <- local(get(load("Data/SCOB.Rdata")))
+#SCOB    <- local(get(load("Data/SCOB.Rdata")))
 # unadjust population size
 SCO$Fac <- 3
 SCO$Fac[SCO$year == 1991] <- 2
