@@ -117,6 +117,12 @@ Vbetween <- function(QXk, pik = rep(1/ncol(QXk),ncol(QXk))){
 	Left - Right
 }
 
+
+
+
+
+
+
 # ------------------------------------------------------------
 # these are function used for extrapolation:
 
@@ -308,3 +314,4 @@ ltper_mx_v5 <- function(Dx, Exp, extrap.ages.i = 81, extrap.to.i = 111, fit.from
 	#list(mx=mx, par=par.est,  se=se.est)
 	return(mx)
 }
+
