@@ -149,3 +149,9 @@ tapply(SCOB$propB[SCOB$sex == 2 ],SCOB$year[SCOB$sex == 2 ],maxA)
 
 
 # make a graph: what proportion of variance in each age comes from ages 85+ (extrapolated ages)
+
+# -------------------------------
+# taking a look at humps for AR:
+#library(reshape2)
+#MXA <- acast(SCOlong[SCOlong$sex == 1, ], age~quintile_2~year, value.var="mx")
+#matplot(MXA[,,2],type='l',log='y')
