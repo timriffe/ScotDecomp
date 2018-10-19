@@ -214,8 +214,8 @@ ltper_mx_v5 <- function(Dx, Exp, extrap.ages.i = 81, extrap.to.i = 111, fit.from
 			# intitial starting values
 			starts.j  <- startingValueGridSearch(a.vals = seq(afromto.j[1], afromto.j[2], by = by.j[1]),
 					b.vals = seq(bfromto.j[1], bfromto.j[2], by = by.j[1]), 
-					.Dx = Dx[81:nrow(Dx), i], 
-					.Exp = Exp[81:nrow(Exp), i],
+					.Dx = Dx[fit.from.i:nrow(Dx), i], 
+					.Exp = Exp[fit.from.i:nrow(Exp), i],
 					.x. = ages.i )
 			
 			# jump into optimization loop- keep trying better starts until it converges
@@ -295,7 +295,7 @@ ltper_mx_v5 <- function(Dx, Exp, extrap.ages.i = 81, extrap.to.i = 111, fit.from
 				KannistoMu(parsest, x = ages - fit.from.i + 1.5)
 			}
 	)
-	fit.from.i
+	
 	# additional redundant check for parameters:
 	if (class(par.est[,1]) != "numeric" | class(par.est[,2]) != "numeric"){
 		stop("looks like one of the parameters didn't converge properly, check: ", sex, ctry)
@@ -314,4 +314,35 @@ ltper_mx_v5 <- function(Dx, Exp, extrap.ages.i = 81, extrap.to.i = 111, fit.from
 	#list(mx=mx, par=par.est,  se=se.est)
 	return(mx)
 }
+
+# Copied from DemoTools package:
+
+qx2lx <- function(nqx, radix = 1e5){
+	radix * cumprod(c(1, 1 - nqx[-length(nqx)]))
+}
+
+lx2dx <- function(lx){
+	diff(-c(lx,0))
+}
+
+lxdxax2Lx <- function(lx, ndx, nax, AgeInt){
+	N                   <- length(lx)
+	nLx                 <- rep(0, N)
+	nLx[1:(N - 1)]      <- AgeInt[1:(N - 1)] * lx[2:N] + nax[1:(N - 1)] * ndx[1:(N - 1)]
+	nLx[N]		        <- lx[N] * nax[N]
+	nLx
+}
+
+Lx2Tx <- function(Lx){
+	rev(cumsum(rev(Lx)))
+}
+
+qxax2e0 <- function(qx,ax){
+	lx <- qx2lx(qx, radix = 1)
+	dx <- lx2dx(lx)
+	Lx <- lxdxax2Lx(lx, dx, ax,AgeInt = rep(1, length(qx)))
+	Tx <- Lx2Tx(Lx)
+	Tx[1] / lx[1]
+}
+
 
