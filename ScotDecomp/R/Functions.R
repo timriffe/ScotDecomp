@@ -344,5 +344,32 @@ qxax2e0 <- function(qx,ax){
 	Tx <- Lx2Tx(Lx)
 	Tx[1] / lx[1]
 }
+qx2sd0 <- function(qx){
+	sqrt(getVk(qx))[1]
+}
+extrap_dt <- function(D,E){
+	
+	D      <- as.matrix(D[1:90])
+	E      <- as.matrix(E[1:90])
+	rownames(D) <- 0:89
+	rownames(E) <- 0:89
+	colnames(D) <- 1
+	colnames(E) <- 1
+	agenew <- 90:110
+	extend <- matrix(NA,nrow=length(agenew),ncol=ncol(D),dimnames=list(agenew,colnames(D)))
+	D      <- rbind(D,extend)
+	E      <- rbind(E,extend)
+	Mx     <- ltper_mx_v5(D,E, fit.from.i = 76)
+	data.frame(age = 0:110,mx=Mx)
+}
 
-
+Byrsex <- function(.SD,w="stationary"){
+	QXkts <- acast(.SD, age ~ q, value.var = "qx")
+	out <- Vbetween(QXkts)
+	out
+}
+Wyrsex <- function(.SD){
+	QXkts <- acast(.SD, age ~q, value.var = "qx")
+	out  <- c(Vwithin(QXkts))
+	out
+}
