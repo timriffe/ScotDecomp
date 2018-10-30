@@ -97,16 +97,14 @@ INCBW$sd       <- sqrt(INCBW$V)
 # combine results and save out
 SIMDBW$measure <- "SIMD"
 INCBW$measure  <- "INC"
-
 BWout          <- rbind(SIMDBW, INCBW)
-
 path           <- "N:/Rosie/For Tim/BMJOpen/Data/Results"
 write.csv(BWout, file=file.path(path, "Between_SIMD_INC_Full.csv"))
 
 
 # now sd against ex for quintiles, just age 0
-e0sdSIMD  <- SIMD[,list(e0=qxax2e0(qx,ax),sd=qx2sd0(qx)),by=list(yr,sex,q)]
-e0sdINC   <- INC[,list(e0=qxax2e0(qx,ax),sd=qx2sd0(qx)),by=list(yr,sex,q)]
+e0sdSIMD  <- SIMD[, list(e0 = qxax2e0(qx, ax), sd = qx2sd0(qx)), by = list(yr, sex, q)]
+e0sdINC   <- INC[, list(e0 = qxax2e0(qx, ax), sd = qx2sd0(qx)), by = list(yr, sex, q)]
 
 path <-"N:/Rosie/For Tim/BMJOpen/Data/Results"
 write.csv(e0sdSIMD, file=file.path(path,"EXSD_SIMD_Full.csv"))

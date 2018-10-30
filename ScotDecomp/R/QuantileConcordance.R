@@ -8,55 +8,89 @@ if (me == "mpidr_d\\riffe"){
 }
 
 library("foreign")
-
+get_modal <- function(x){
+	tab <- table(unlist(x))
+	as.integer(names(tab)[which.max(tab)])
+}
 # data path valid only if on MPIDR PC:
 
 data.path <- "N:/Rosie/For Tim/BMJOpen/Data/V12"
 
 Car <- read.dta(file.path(data.path,"Carstairs_V12.dta"))
 Car <- data.frame(Car)
-Car$quintile2011 <- 6 - Car$quintile2011
-tail(Car)
+Car$quintile[Car$year == 2011] <- 6 - Car$quintile[Car$year == 2011]
 
-get_modal <- function(x){
-	tab <- table(unlist(x))
-	as.integer(names(tab)[which.max(tab)])
+# how many unique codes per year
+length(unique(Car$pcsector[Car$year == 1981]))
+length(unique(Car$pcsector[Car$year == 1991]))
+length(unique(Car$pcsector[Car$year == 2001]))
+length(unique(Car$pcsector[Car$year == 2011]))
+
+# how many cases of unsplit vs twice split bla bla per year
+tab1981 <- table(Car$pcsector[Car$year == 1981])
+tab1991 <- table(Car$pcsector[Car$year == 1991])
+tab2001 <- table(Car$pcsector[Car$year == 2001])
+tab2011 <- table(Car$pcsector[Car$year == 2011])
+
+table(tab1981)
+table(tab1991)
+table(tab2001)
+table(tab2011)
+
+# -------------------------------
+keep1981 <- names(tab1981)[tab1981 == 1]
+keep1991 <- names(tab1991)[tab1991 == 1]
+keep2001 <- names(tab2001)[tab2001 == 1]
+keep2011 <- names(tab2011)[tab2011 == 1]
+
+Car$once <- FALSE
+Car$once[Car$year == 1981 & Car$pcsector %in% keep1981] <- TRUE
+Car$once[Car$year == 1991 & Car$pcsector %in% keep1991] <- TRUE
+Car$once[Car$year == 2001 & Car$pcsector %in% keep2001] <- TRUE
+Car$once[Car$year == 2011 & Car$pcsector %in% keep2011] <- TRUE
+
+# ca 180 / census are split
+#sum(!Car$once)/4
+# --------------------------------
+
+Quint1 <- acast(Car[Car$once, ], pcsector~year, value.var = "quintile")
+mode   <- apply(Quint1,1,get_modal)
+
+(tab1981 <- table(Quint1[,1],mode))
+(tab1991 <- table(Quint1[,2],mode))
+(tab2001 <- table(Quint1[,3],mode))
+(tab2011 <- table(Quint1[,4],mode))
+
+prop_same(tab1981) # 0.7580438
+prop_same(tab1991) # 0.7959698
+prop_same(tab2001) # 0.8085352
+prop_same(tab2011) # 0.752
+
+prop_same(tab1981) + prop_off(tab1981,1) # 0.9420849
+prop_same(tab1991) + prop_off(tab1991,1) # 0.9571788
+prop_same(tab2001) + prop_off(tab2001,1) # 0.9861592
+prop_same(tab2011) + prop_off(tab2011,1) # 0.9714286
+
+# --------------------------------------
+# still not convinced? How about we look at deprivation score
+# distributions: observed quintile vs modal quintile, per year
+
+
+z1 <- acast(Car[Car$once, ], pcsector~year, value.var = "carstair")
+breaks <- seq(-10,10,by=.2)
+
+compare <- function(z1,quint,mode,col1 = "#0000FF50", col2 = "#FF000050", breaks = seq(-10,10,by=.2),year=1,q=1){
+	hist(z1[quint[,year] == q,year],breaks=breaks, col = col1)
+	hist(z1[mode == q,year], add = TRUE, col = col2,breaks=breaks)
 }
-mode <- apply(Car,1,get_modal)
-
-Modes <- data.frame(pcsector = Car$pcsector, modal_quintile = mode)
-write.csv(Modes, file = file.path(data.path,"CarMode.csv"))
-
-# once-off spot check of heavy switchers
-carvar <- rowSums((Car[,-1] - rowMeans(Car[,-1],na.rm=TRUE))^2,na.rm=TRUE) / rowSums(!is.na(Car[,-1]))
-Car$carvar <- carvar
-checkind <- rowSums(!is.na(Car[,2:5])) == 4
-carcheck <- Car[checkind, ]
-tail(carcheck[order(carcheck$carvar), ], 10)[,1]
-# give Rosie the top 10 variance pcsectors, emailed
-
-
-tab1981 <- table(Car$quintile1981,mode)
-tab1991 <- table(Car$quintile1991,mode)
-tab2001 <- table(Car$quintile2001,mode)
-tab2011 <- table(Car$quintile2011,mode)
-
-prop_same <- function(tab){
-	sum(diag(tab)) / sum(tab)
+breaks <- seq(-16,16,by=.5)
+par(mfrow=c(4,5), mai=c(.1,.1,.1,.1))
+for (yr in 1:4){
+     for (quint in 1:5){
+			compare(z1,Quint1,mode,breaks=breaks,year=yr,q=quint)
+	}
 }
-prop_same(tab1981) # 0.7534653
-prop_same(tab1991) # 0.7712288
-prop_same(tab2001) # 0.7930693
-prop_same(tab2011) # 0.7440711
 
-prop_off <- function(tab, offset = 0){
-	ind <- abs(row(tab) - col(tab)) == offset
-	sum(tab[ind]) / sum(tab)
-}
-prop_same(tab1981) + prop_off(tab1981,1) # 0.9257426
-prop_same(tab1991) + prop_off(tab1991,1) # 0.9250749
-prop_same(tab2001) + prop_off(tab2001,1) # 0.9693069
-prop_same(tab2011) + prop_off(tab2011,1) # 0.958498
 
 
 
