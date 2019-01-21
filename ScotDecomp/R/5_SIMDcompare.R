@@ -3,27 +3,17 @@
 # but with separate population-weighted quintile classification
 # by Carstairs, SIMD, and the Income-only domain of SIMD. This
 # allows for a measure comparison without free of the modifiable
-# areal unit problem.
+# areal unit problem. 2011 only! No other year allows us to compare 
+# geography like this.
 
 
-# 1) deaths grouped for years 2010,2011,2012
-# 2) census in 2011, counts multiplied by 3
 
-me <- system("whoami",intern=TRUE)
-if (me == "tim"){
-	setwd("/home/tim/git/ScotDecomp/ScotDecomp")
-} 
-if (me == "mpidr_d\\riffe"){
-	setwd("U:/git/ScotDecomp/ScotDecomp")
-}
-source("R/Functions.R")
-library(foreign)
-library(data.table)
-library(reshape2)
+source(file.path("R","0_Functions.R"))
+
 
 # Data kept on N drive, MPIDR PC only.
-data.path <- "N:/Rosie/For Tim/BMJOpen/Data/V12"
-Car       <- read.dta(file.path(data.path,"Carstairs_score_for_datazones_V12.dta"))
+
+Car       <- read.dta(file.path("Data","Inputs","Carstairs_score_for_datazones_V12.dta"))
 Car       <- data.table(Car)
 
 # aggregate within the quintiles of each measure; creates 3 datasets.
@@ -87,16 +77,16 @@ SIMD2mx$qx[SIMD2mx$age == 110] <- 1
 
 # generate Between and Within variance
 CARBW <- CARmx[,list(age = unique(age),
-				Bst = Byrsex(.SD), 
-				Wst = Wyrsex(.SD)), 
+				Bst = Byrsex_dt(.SD), 
+				Wst = Wyrsex_dt(.SD)), 
 		       by = list(sex)]
 SIMD1BW <- SIMD1mx[,list(age = unique(age),
-					   Bst = Byrsex(.SD), 
-					   Wst = Wyrsex(.SD)), 
+					   Bst = Byrsex_dt(.SD), 
+					   Wst = Wyrsex_dt(.SD)), 
 			   by = list(sex)]
 SIMD2BW <- SIMD2mx[,list(age = unique(age),
-					   Bst = Byrsex(.SD), 
-					   Wst = Wyrsex(.SD)), 
+					   Bst = Byrsex_dt(.SD), 
+					   Wst = Wyrsex_dt(.SD)), 
 			   by = list(sex)]
 	   
 # get measures detived from between and within variance
@@ -104,10 +94,12 @@ SIMD2BW <- SIMD2mx[,list(age = unique(age),
 CARBW$V         <- CARBW$B + CARBW$W
 SIMD1BW$V       <- SIMD1BW$B + SIMD1BW$W
 SIMD2BW$V       <- SIMD2BW$B + SIMD2BW$W
+
 # proportion between
 CARBW$propB     <- CARBW$B / CARBW$V
 SIMD1BW$propB   <- SIMD1BW$B / SIMD1BW$V
 SIMD2BW$propB   <- SIMD2BW$B / SIMD2BW$V
+
 # standard deviations
 CARBW$sd        <- sqrt(CARBW$V)
 SIMD1BW$sd      <- sqrt(SIMD1BW$V)
@@ -119,8 +111,9 @@ SIMD1BW$measure <- "SIMD"
 SIMD2BW$measure <- "INC"
 
 CompareOut <- rbind(CARBW, SIMD1BW, SIMD2BW)
-path <-"N:/Rosie/For Tim/BMJOpen/Data/Results"
-write.csv(CompareOut, file = file.path(path, "Between_Compare_2011.csv"))
+
+# save out results
+write.csv(CompareOut, file = file.path("Data","Derived", "Between_Compare_2011.csv"))
 
 # Derive e0 and sd0 for each quintile also to report
 e0c          <- CARmx[, list(e0 = qxax2e0(qx, ax), sd = qx2sd0(qx)), by = list(sex, q)]
@@ -133,8 +126,8 @@ e0s2$measure <- "INC"
 
 e0out        <- rbind(e0c,e0s1, e0s2)
 
-path         <-"N:/Rosie/For Tim/BMJOpen/Data/Results"
-write.csv(e0out,file=file.path(path,"EXSD_Compare_2011.csv"))
+# save out results
+write.csv(e0out,file=file.path("Data","Derived","EXSD_Compare_2011.csv"))
 
 # exploratory plots and other assorted deprecated code
 # ----------------------------------------------------

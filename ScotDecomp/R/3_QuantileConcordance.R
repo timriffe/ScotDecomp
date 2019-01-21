@@ -1,23 +1,13 @@
+# this is a data check, independent of th rest of analyses
 
-me <- system("whoami",intern=TRUE)
-if (me == "tim"){
-	setwd("/home/tim/git/ScotDecomp/ScotDecomp")
-} 
-if (me == "mpidr_d\\riffe"){
-	setwd("U:/git/ScotDecomp/ScotDecomp")
-}
-
-library("foreign")
-get_modal <- function(x){
-	tab <- table(unlist(x))
-	as.integer(names(tab)[which.max(tab)])
-}
+source(file.path("R","0_Functions.R"))
 # data path valid only if on MPIDR PC:
 
-data.path <- "N:/Rosie/For Tim/BMJOpen/Data/V12"
 
-Car <- read.dta(file.path(data.path,"Carstairs_V12.dta"))
+Car <- read.dta(file.path("Data","Inputs","Carstairs_V12.dta"))
 Car <- data.frame(Car)
+
+# flip 2011 quintiles due to odd coding switch
 Car$quintile[Car$year == 2011] <- 6 - Car$quintile[Car$year == 2011]
 
 # how many unique codes per year
@@ -38,6 +28,7 @@ table(tab2001)
 table(tab2011)
 
 # -------------------------------
+# codes of postal code sectors that never switch
 keep1981 <- names(tab1981)[tab1981 == 1]
 keep1991 <- names(tab1991)[tab1991 == 1]
 keep2001 <- names(tab2001)[tab2001 == 1]
@@ -52,6 +43,7 @@ Car$once[Car$year == 2011 & Car$pcsector %in% keep2011] <- TRUE
 # ca 180 / census are split
 #sum(!Car$once)/4
 # --------------------------------
+
 
 Quint1 <- acast(Car[Car$once, ], pcsector~year, value.var = "quintile")
 mode   <- apply(Quint1,1,get_modal)
@@ -72,6 +64,8 @@ prop_same(tab2001) + prop_off(tab2001,1) # 0.9861592
 prop_same(tab2011) + prop_off(tab2011,1) # 0.9714286
 
 # --------------------------------------
+do.this <- FALSE
+if (do.this){
 # still not convinced? How about we look at deprivation score
 # distributions: observed quintile vs modal quintile, per year
 
@@ -90,7 +84,7 @@ for (yr in 1:4){
 			compare(z1,Quint1,mode,breaks=breaks,year=yr,q=quint)
 	}
 }
-
+}
 
 
 

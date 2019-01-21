@@ -1,8 +1,64 @@
 
-# Author: tim
+# There is no need to manually select these functions. This script
+# is loaded using source() at the start of each downstream script.
+# These functions are not well-documented, sorry
 ###############################################################################
+library(reshape2)
+library(reshape2)
+library(data.table)
+library(xtable)
+library(foreign)
+library(DemoTools)
 
+# life expectancy at birth based on specified
+# qx and ax
+qxax2e0 <- function(qx,ax){
+	lx <- qx2lx(qx, radix = 1)
+	dx <- lx2dx(lx)
+	Lx <- lxdxax2Lx(lx, dx, ax,AgeInt = rep(1, length(qx)))
+	Tx <- Lx2Tx(Lx)
+	Tx[1] / lx[1]
+}
+# standard deviation of lifetable based on qx
+qx2sd0 <- function(qx){
+	sqrt(getVk(qx))[1]
+}
 
+# a function to do HMD mx smoothing for a layer of an array
+extrap <- function(DX, NX){
+	DX     <- DX[-nrow(DX), ]
+	NX     <- NX[-nrow(NX), ]
+	mat110 <- matrix(NA,ncol=ncol(DX),nrow=111,dimnames=list(0:110,colnames(DX)))
+	DXe    <- mat110
+	DXe[rownames(DX),colnames(DX)] <- DX
+	NXe    <- mat110
+	NXe[rownames(NX),colnames(NX)] <- NX
+	
+	ages.i <- rep(nrow(DX),ncol(DX)) + 1
+	
+	# HMD mx smoothing routine, modified to grab information
+	# from an arbitrary lower bound. (HMD uses 80)
+	ltper_mx_v5(DXe,NXe,ages.i,fit.from.i = 76 )
+}
+# same as above, but in a data.table setup (cleaner)
+extrap_dt <- function(D,E){
+	
+	D      <- as.matrix(D[1:90])
+	E      <- as.matrix(E[1:90])
+	rownames(D) <- 0:89
+	rownames(E) <- 0:89
+	colnames(D) <- 1
+	colnames(E) <- 1
+	agenew <- 90:110
+	extend <- matrix(NA,nrow=length(agenew),ncol=ncol(D),dimnames=list(agenew,colnames(D)))
+	D      <- rbind(D,extend)
+	E      <- rbind(E,extend)
+	Mx     <- ltper_mx_v5(D,E, fit.from.i = 76)
+	data.frame(age = 0:110,mx=Mx)
+}
+
+# matrix calc functions. 
+# U is a square matrix w survivial probabilities in subdiagonal
 getUk <- function(qx){
 	N <- length(qx)
 	# diag
@@ -14,7 +70,8 @@ getUk <- function(qx){
 	U
 }
 
-# get N from qx (conditional lx)
+# get fundamental matrix N from qx. 
+# colSums of N gives ex
 getNk <- function(qx){
 	Uk <- getUk(qx)
 	Nk <- solve(
@@ -117,14 +174,54 @@ Vbetween <- function(QXk, pik = rep(1/ncol(QXk),ncol(QXk))){
 	Left - Right
 }
 
-
-
-
+# make a function that calcs within and between for a year and sex:
+# raw weighting not prepared because N in orig dat aonly up to 85+,
+# could resistribute 85+ according to l(85+), but that's for another
+# day. 
+Byrsex <- function(.SD,w="stationary"){
+	QXkts <- acast(.SD, age ~quintile_2, value.var = "qx")
+	if (w == "stationary"){
+		out <- Vbetween(QXkts)
+	}
+	if (w == "raw"){
+		NXkts <- acast(.SD, age ~quintile_2, value.var = "N")
+		raww  <- NXkts / rowSums(NXkts)
+		out   <- Vbetween(QXkts,raww)
+	}
+	out
+}
+# within for a year and sex
+Wyrsex <- function(.SD,w="stationary"){
+	QXkts <- acast(.SD, age ~quintile_2, value.var = "qx")
+	if (w == "stationary"){
+		out <- c(Vwithin(QXkts))
+	}
+	if (w == "raw"){
+		NXkts <- acast(.SD, age ~quintile_2, value.var = "N")
+		raww  <- NXkts / rowSums(NXkts)
+		out <- c(Vwithin(QXkts,raww))
+	}
+	out
+}
+# and again in a data.table setup
+Byrsex_dt <- function(.SD,w="stationary"){
+	QXkts <- acast(.SD, age ~ q, value.var = "qx")
+	out <- Vbetween(QXkts)
+	out
+}
+Wyrsex_dt  <- function(.SD){
+	QXkts <- acast(.SD, age ~q, value.var = "qx")
+	out  <- c(Vwithin(QXkts))
+	out
+}
 
 
 
 # ------------------------------------------------------------
 # these are function used for extrapolation:
+
+# taken or modified from the HLDLifeTables package (not public yet, 
+# otherwise we'd load it as a dependency)
 
 # ---------------------------------------------------
 # define internal functions for kannisto maxlik
@@ -190,7 +287,7 @@ startingValueGridSearch <- function(
 }
 
 
-
+# same but modified for lower age
 ltper_mx_v5 <- function(Dx, Exp, extrap.ages.i = 81, extrap.to.i = 111, fit.from.i = 81){
 	
 	# -------------------------------------------------------------
@@ -214,8 +311,8 @@ ltper_mx_v5 <- function(Dx, Exp, extrap.ages.i = 81, extrap.to.i = 111, fit.from
 			# intitial starting values
 			starts.j  <- startingValueGridSearch(a.vals = seq(afromto.j[1], afromto.j[2], by = by.j[1]),
 					b.vals = seq(bfromto.j[1], bfromto.j[2], by = by.j[1]), 
-					.Dx = Dx[fit.from.i:nrow(Dx), i], 
-					.Exp = Exp[fit.from.i:nrow(Exp), i],
+					.Dx = Dx[81:nrow(Dx), i], 
+					.Exp = Exp[81:nrow(Exp), i],
 					.x. = ages.i )
 			
 			# jump into optimization loop- keep trying better starts until it converges
@@ -295,7 +392,7 @@ ltper_mx_v5 <- function(Dx, Exp, extrap.ages.i = 81, extrap.to.i = 111, fit.from
 				KannistoMu(parsest, x = ages - fit.from.i + 1.5)
 			}
 	)
-	
+	fit.from.i
 	# additional redundant check for parameters:
 	if (class(par.est[,1]) != "numeric" | class(par.est[,2]) != "numeric"){
 		stop("looks like one of the parameters didn't converge properly, check: ", sex, ctry)
@@ -315,61 +412,23 @@ ltper_mx_v5 <- function(Dx, Exp, extrap.ages.i = 81, extrap.to.i = 111, fit.from
 	return(mx)
 }
 
-# Copied from DemoTools package:
 
-qx2lx <- function(nqx, radix = 1e5){
-	radix * cumprod(c(1, 1 - nqx[-length(nqx)]))
-}
-
-lx2dx <- function(lx){
-	diff(-c(lx,0))
+# some helper function for quantile concordance scri
+get_modal <- function(x){
+	tab <- table(unlist(x))
+	as.integer(names(tab)[which.max(tab)])
 }
 
-lxdxax2Lx <- function(lx, ndx, nax, AgeInt){
-	N                   <- length(lx)
-	nLx                 <- rep(0, N)
-	nLx[1:(N - 1)]      <- AgeInt[1:(N - 1)] * lx[2:N] + nax[1:(N - 1)] * ndx[1:(N - 1)]
-	nLx[N]		        <- lx[N] * nax[N]
-	nLx
+# assuming a square concordance matrix, X
+# diagonal are same cases
+prop_same <- function(X){
+	sum(diag(X)) / sum(X)
 }
-
-Lx2Tx <- function(Lx){
-	rev(cumsum(rev(Lx)))
-}
-
-qxax2e0 <- function(qx,ax){
-	lx <- qx2lx(qx, radix = 1)
-	dx <- lx2dx(lx)
-	Lx <- lxdxax2Lx(lx, dx, ax,AgeInt = rep(1, length(qx)))
-	Tx <- Lx2Tx(Lx)
-	Tx[1] / lx[1]
-}
-qx2sd0 <- function(qx){
-	sqrt(getVk(qx))[1]
-}
-extrap_dt <- function(D,E){
+# and in a given off diagonal
+prop_off <- function(X, off = 1){
+	ind <- abs(row(X) - col(X)) == off
 	
-	D      <- as.matrix(D[1:90])
-	E      <- as.matrix(E[1:90])
-	rownames(D) <- 0:89
-	rownames(E) <- 0:89
-	colnames(D) <- 1
-	colnames(E) <- 1
-	agenew <- 90:110
-	extend <- matrix(NA,nrow=length(agenew),ncol=ncol(D),dimnames=list(agenew,colnames(D)))
-	D      <- rbind(D,extend)
-	E      <- rbind(E,extend)
-	Mx     <- ltper_mx_v5(D,E, fit.from.i = 76)
-	data.frame(age = 0:110,mx=Mx)
+	sum(X[ind]) / sum(X)
 }
 
-Byrsex <- function(.SD,w="stationary"){
-	QXkts <- acast(.SD, age ~ q, value.var = "qx")
-	out <- Vbetween(QXkts)
-	out
-}
-Wyrsex <- function(.SD){
-	QXkts <- acast(.SD, age ~q, value.var = "qx")
-	out  <- c(Vwithin(QXkts))
-	out
-}
+# end function definitions

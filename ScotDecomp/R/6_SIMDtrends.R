@@ -6,30 +6,19 @@
 # different results is due to the modifiable areal unit problem: i.e. SIMD has 6000+
 # geographic units, whereas Carstairs is tabulated on abotu 1/5 as many.
 
-
-# header to determine working directory
-me <- system("whoami",intern=TRUE)
-if (me == "tim"){
-	setwd("/home/tim/git/ScotDecomp/ScotDecomp")
-}
-if (me == "mpidr_d\\seaman"){
-	setwd("U:/Conferences/PAA/2018 Denver/within and between/ScotDecomp")
-	
-}
-
 # ---------------------
 
-source("R/Functions.R")
-library(foreign)
-library(data.table)
+source(file.path("R","0_Functions.R"))
+
 # --------------------------
 
 # read in data sets
 # SIMD
-SIMD <- read.dta("N:/Rosie/For Tim/BMJOpen/Data/Quintile_SIMD_Full.dta")
+
+SIMD <- read.dta(file.path("Data","Inputs","Quintile_SIMD_Full.dta"))
 # Income-only
-INC  <- read.dta("N:/Rosie/For Tim/BMJOpen/Data/Quintile_Income_Domain.dta")
-head(SIMD)
+INC  <- read.dta(file.path("Data","Inputs","Quintile_Income_Domain.dta"))
+
 # -----------------------------
 
 # step 1: extrapolate to age 110
@@ -40,7 +29,8 @@ INC  <- data.table(INC)
 setnames(SIMD,"SIMD_quintile","q")
 setnames(INC,"income_quintile","q")
 
-# extrapolate death rates to age 110 using modified HMD protocol
+# extrapolate death rates to age 110 using modified HMD protocol,
+# ignore warnings.
 SIMD   <- SIMD[,extrap_dt(deaths_SIMD_quintile, population_SIMD_quintile),
 		        by = list(yr, sex, q)]
 	
@@ -67,20 +57,18 @@ INC$ax[INC$age == 110]        <- 1 / INC$mx[INC$age == 110]
 SIMD$qx                       <- SIMD$mx / (1 + (1- SIMD$ax) * SIMD$mx )
 INC$qx                        <- INC$mx / (1 + (1- INC$ax) * INC$mx )
 
-# now do within between stuff
-
 # generate B and W variance
 SIMDBW <- SIMD[,list(age = unique(age),
-				Bst = Byrsex(.SD), 
-				Wst = Wyrsex(.SD)), 
+				Bst = Byrsex_dt(.SD), 
+				Wst = Wyrsex_dt(.SD)), 
 		by = list(yr, sex)]
 
 INCBW <- INC[,list(age = unique(age),
-				Bst = Byrsex(.SD), 
-				Wst = Wyrsex(.SD)), 
+				Bst = Byrsex_dt(.SD), 
+				Wst = Wyrsex_dt(.SD)), 
 		by = list(yr, sex)]
 
-# other quantities derives from B and B variance
+# other quantities derived from B and W variance
 
 # sum to total variance
 SIMDBW$V       <- SIMDBW$B + SIMDBW$W
@@ -98,17 +86,18 @@ INCBW$sd       <- sqrt(INCBW$V)
 SIMDBW$measure <- "SIMD"
 INCBW$measure  <- "INC"
 BWout          <- rbind(SIMDBW, INCBW)
-path           <- "N:/Rosie/For Tim/BMJOpen/Data/Results"
-write.csv(BWout, file=file.path(path, "Between_SIMD_INC_Full.csv"))
+
+# save out
+write.csv(BWout, file=file.path("Data","Derived", "Between_SIMD_INC_Full.csv"))
 
 
 # now sd against ex for quintiles, just age 0
 e0sdSIMD  <- SIMD[, list(e0 = qxax2e0(qx, ax), sd = qx2sd0(qx)), by = list(yr, sex, q)]
 e0sdINC   <- INC[, list(e0 = qxax2e0(qx, ax), sd = qx2sd0(qx)), by = list(yr, sex, q)]
 
-path <-"N:/Rosie/For Tim/BMJOpen/Data/Results"
-write.csv(e0sdSIMD, file=file.path(path,"EXSD_SIMD_Full.csv"))
-write.csv(e0sdINC, file=file.path(path,"EXSD_INC_Full.csv"))
+# more results files.
+write.csv(e0sdSIMD, file=file.path("Data","Derived","EXSD_SIMD_Full.csv"))
+write.csv(e0sdINC, file=file.path("Data","Derived","EXSD_INC_Full.csv"))
 
 
 # exploratory plotting of results, deprecated

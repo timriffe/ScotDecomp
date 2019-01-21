@@ -1,76 +1,45 @@
-# Author: tim
-###############################################################################
-
-# TODO: make graphs of within and between variance
-
-
-# header to determine working directory
-me <- system("whoami",intern=TRUE)
-if (me == "tim"){
-	setwd("/home/tim/git/ScotDecomp/ScotDecomp")
-}
-if (me == "mpidr_d\\seaman"){
-	setwd("U:/Conferences/PAA/2018 Denver/within and between/ScotDecomp")
-	
-}
 
 # ---------------------
-library(reshape2)
-library(data.table)
-source("R/Functions.R")
-#source("R/Extrapolate.R")
+source(file.path("R","0_Functions.R"))
 
+SCO <- local(get(load(file.path("Data","Derived","SCOlong.Rdata"))))
 
-SCO <- local(get(load("Data/SCOlong.Rdata")))
+# remove the Scotland aggregate. It isn't the same as
+# the synthetic blend of quintile lifetables. cuz the
+# weights would be different.
 SCO <- SCO[SCO$quintile_2 != 999, ]
 
-# calculate things manually (too much typing sorry)
-
-# make a function that calcs within and between for a year and sex:
-# raw weighting not prepared because N in orig dat aonly up to 85+,
-# could resistribute 85+ according to l(85+), but that's for another
-# day. 
-Byrsex <- function(.SD,w="stationary"){
-	QXkts <- acast(.SD, age ~quintile_2, value.var = "qx")
-	if (w == "stationary"){
-		out <- Vbetween(QXkts)
-	}
-	if (w == "raw"){
-		NXkts <- acast(.SD, age ~quintile_2, value.var = "N")
-		raww  <- NXkts / rowSums(NXkts)
-		out <- Vbetween(QXkts,raww)
-	}
-	out
-}
-Wyrsex <- function(.SD,w="stationary"){
-	QXkts <- acast(.SD, age ~quintile_2, value.var = "qx")
-	if (w == "stationary"){
-		out <- c(Vwithin(QXkts))
-	}
-	if (w == "raw"){
-		NXkts <- acast(.SD, age ~quintile_2, value.var = "N")
-		raww  <- NXkts / rowSums(NXkts)
-		out <- c(Vwithin(QXkts,raww))
-	}
-	out
-}
-
+# convert data type for easier calcs
 SCO <- data.table(SCO)
 
+# calculate between and within components directly. By year and sex,
+# implying 4 x 2 subsets.
 SCOB <- SCO[,list(age = unique(age),
 				  Bst = Byrsex(.SD), 
 				  Wst = Wyrsex(.SD)), 
 		  by = list(year, sex)]
 
+# total is the sum
 SCOB$V     <- SCOB$B + SCOB$W
+
+# proportion between (reported in manuscript)
 SCOB$propB <- SCOB$B / SCOB$V
+
+# standard deviation (reported in manuscript)
 SCOB$sd    <- sqrt(SCOB$V)
 
+# convert back to standard data.frame, just because
 SCOB       <- as.data.frame(SCOB)
 
-save(SCOB,file="Data/SCOB.Rdata")
+# save out intermediate data object for downstream analyses, viz
+save(SCOB,file=file.path("Data","Derived","SCOB.Rdata"))
 
 
+
+# Figure production in R (not used in manuscript)
+
+do.this <- FALSE
+if (do.this){
 mp         <- acast(SCOB[SCOB$sex == 1, ], age~year, value.var = "propB")
 fp         <- acast(SCOB[SCOB$sex == 2, ], age~year, value.var = "propB")
 mp         <- mp[1:86, ]
@@ -256,7 +225,7 @@ matplot(a, fw/fv, type = 'l', col = gray(c(.7,.5,.3,0)),lwd = c(3,2,1.5,1),
 text(10,fw[11,]/fv[11,],c(1981,1991,2001,2011),pos=c(3,1,1,1)) 
 dev.off()
 
-
+}
 
 
 
