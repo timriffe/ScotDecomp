@@ -2,10 +2,7 @@
 # ---------------------
 source(file.path("R","0_Functions.R"))
 #source("R/Extrapolate.R")
-# make a function that calcs within and between for a year and sex:
-# raw weighting not prepared because N in orig dat aonly up to 85+,
-# could resistribute 85+ according to l(85+), but that's for another
-# day. 
+
 Byr <- function(.SD,w="stationary"){
 	# only difference is that we have sex in columns...
 	QXkts <- acast(.SD, age ~ sex, value.var = "qx")
@@ -154,3 +151,4 @@ text(20,probBf["20", ], colnames(probBf),pos=1)
 dev.off()
 
 }
+
